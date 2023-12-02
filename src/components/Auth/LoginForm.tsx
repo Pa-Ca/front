@@ -20,7 +20,7 @@ const Form: FC<FormInterface> = ({ onRecoverPassword, formik }) => {
           id="email"
           name="email"
           autoComplete="email"
-          label="Correo Electrónico"
+          label="Correo"
           value={formik.values.email}
           error={
             formik.touched.email && formik.errors.email ? formik.errors.email : undefined
@@ -63,12 +63,10 @@ const Form: FC<FormInterface> = ({ onRecoverPassword, formik }) => {
 };
 
 interface LoginFormProps {
-  initialValues?: LoginFormValues;
   onRecoverPassword?: () => void;
   onSubmit?: (prop: LoginFormValues) => void;
 }
 export const LoginForm: FC<LoginFormProps> = ({
-  initialValues = { email: "", password: "" },
   onRecoverPassword = () => {},
   onSubmit = () => {},
 }) => {
@@ -80,7 +78,7 @@ export const LoginForm: FC<LoginFormProps> = ({
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{ email: "", password: "" }}
       validationSchema={validationSchema}
       onSubmit={(values, { resetForm }) => {
         onSubmit(values);

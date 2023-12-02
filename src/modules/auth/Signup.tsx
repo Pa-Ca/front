@@ -1,15 +1,14 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginForm, LinkText } from "@components";
-import logo from "../../assets/images/pa-ca-icon.png";
+import { SignupForm, LinkText } from "@components";
 import { Carousel, IconButton } from "@material-tailwind/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
-const Login: FC = () => {
+const Signup: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Iniciar Sesión - Pa'ca";
+    document.title = "Registrarse - Pa'ca";
   }, []);
 
   return (
@@ -19,23 +18,18 @@ const Login: FC = () => {
         style={{ maxWidth: "60rem" }}
       >
         <div className="flex flex-1 flex-col justify-evenly">
-          <div>
-            <img src={logo} alt="Pa'ca logo" width="75" height="75" />
-            <h1
-              style={{ fontSize: "2.3rem" }}
-              className="font-bold text-start text-gray-900"
-            >
-              ¡Bienvenido!
-            </h1>
+          <h1
+            style={{ fontSize: "2.3rem" }}
+            className="font-bold text-start text-gray-900"
+          >
+            Regístrate
+          </h1>
 
-            <p className="text-gray-700 text-lg mt-2">Inicia sesión para continuar</p>
-          </div>
-
-          <LoginForm />
+          <SignupForm />
 
           <span className="text-sm w-full text-center mt-2">
-            ¿No tienes una cuenta?{" "}
-            <LinkText text="Regístrate" onClick={() => navigate("/signup")} />
+            ¿Ya tienes una cuenta?{" "}
+            <LinkText text="Inicia Sesión" onClick={() => navigate("/login")} />
           </span>
         </div>
 
@@ -99,4 +93,4 @@ const Login: FC = () => {
   );
 };
 
-export default Login;
+export default Signup;
