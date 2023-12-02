@@ -9,7 +9,7 @@ const PasswordRecovery: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Iniciar Sesión - Pa'ca";
+    document.title = "Recuperar Contraseña - Pa'ca";
   }, []);
 
   return (

@@ -1,9 +1,10 @@
 import { FC } from "react";
 import * as Yup from "yup";
+import { FormCheckbox } from "@components";
 import { Formik, FormikProps } from "formik";
+import { useNavigate } from "react-router-dom";
 import { FormText } from "../FormInputs/FormText";
 import { LinkText, PrimaryButton } from "../FormInputs/Buttons";
-import { FormCheckbox } from "@components";
 
 export interface SignupFormValues {
   name: string;
@@ -16,6 +17,8 @@ interface FormInterface {
   formik: FormikProps<SignupFormValues>;
 }
 const Form: FC<FormInterface> = ({ formik }) => {
+  const navigate = useNavigate();
+
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">
       <div className="flex flex-col gap-4">
@@ -89,7 +92,11 @@ const Form: FC<FormInterface> = ({ formik }) => {
             />
 
             <p className="text-sm items-center">
-              Acepto los <LinkText text="Términos y Condiciones" />
+              Acepto los{" "}
+              <LinkText
+                text="Términos y Condiciones"
+                onClick={() => navigate("/terms-and-conditions")}
+              />
             </p>
           </div>
 
