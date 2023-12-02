@@ -1,5 +1,6 @@
 import Login from "./modules/auth/Login";
 import Signup from "./modules/auth/Signup";
+import PasswordRecovery from "./modules/auth/PasswordRecovery";
 
 interface AppRoute {
   /**
@@ -19,6 +20,7 @@ interface AppRoute {
 const AppRoutes: AppRoute[] = [
   { path: "/login", element: <Login />, auth: false },
   { path: "/signup", element: <Signup />, auth: false },
+  { path: "/password-recovery", element: <PasswordRecovery />, auth: false },
   { path: "/*", element: <Login />, auth: false },
 ];
 

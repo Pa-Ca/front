@@ -1,6 +1,7 @@
 import { FC } from "react";
 import * as Yup from "yup";
 import { Formik, FormikProps } from "formik";
+import { useNavigate } from "react-router-dom";
 import { FormText } from "../FormInputs/FormText";
 import { LinkText, PrimaryButton } from "../FormInputs/Buttons";
 
@@ -9,10 +10,11 @@ export interface LoginFormValues {
   password: string;
 }
 interface FormInterface {
-  onRecoverPassword?: () => void;
   formik: FormikProps<LoginFormValues>;
 }
-const Form: FC<FormInterface> = ({ onRecoverPassword, formik }) => {
+const Form: FC<FormInterface> = ({ formik }) => {
+  const navigate = useNavigate();
+
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">
       <div className="flex flex-col gap-4">
@@ -46,7 +48,7 @@ const Form: FC<FormInterface> = ({ onRecoverPassword, formik }) => {
           <div className="w-full flex justify-end">
             <LinkText
               text="Olvidé mi contraseña"
-              onClick={onRecoverPassword}
+              onClick={() => navigate("/password-recovery")}
               className="text-sm"
             />
           </div>
@@ -63,13 +65,9 @@ const Form: FC<FormInterface> = ({ onRecoverPassword, formik }) => {
 };
 
 interface LoginFormProps {
-  onRecoverPassword?: () => void;
   onSubmit?: (prop: LoginFormValues) => void;
 }
-export const LoginForm: FC<LoginFormProps> = ({
-  onRecoverPassword = () => {},
-  onSubmit = () => {},
-}) => {
+export const LoginForm: FC<LoginFormProps> = ({ onSubmit = () => {} }) => {
   // Validations with Yup for Formik form
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Este campo es requerido"),
@@ -85,7 +83,7 @@ export const LoginForm: FC<LoginFormProps> = ({
         resetForm();
       }}
     >
-      {(formik) => <Form formik={formik} onRecoverPassword={onRecoverPassword} />}
+      {(formik) => <Form formik={formik} />}
     </Formik>
   );
 };

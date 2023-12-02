@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import classNames from "classnames";
 import { FormikErrors } from "formik";
 import { FormLabel } from "./FormLabel";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
 export const inputClassName =
   "focus block w-full rounded-lg border-0 text-gray-800 " +
@@ -66,13 +66,13 @@ export const FormText: FC<FormTextProps> = ({
           {type === "password" && currentType === "password" && (
             <EyeIcon
               onClick={() => setCurrentType("text")}
-              className="absolute cursor-pointer text-gray-800 h-5 w-5 right-2"
+              className="absolute cursor-pointer text-orange-800 h-6 w-6 right-2"
             />
           )}
           {type === "password" && currentType === "text" && (
             <EyeSlashIcon
               onClick={() => setCurrentType("password")}
-              className="absolute cursor-pointer text-gray-800 h-5 w-5 right-2"
+              className="absolute cursor-pointer text-orange-800 h-6 w-6 right-2"
             />
           )}
         </div>
