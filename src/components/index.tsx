@@ -4,6 +4,9 @@ export * from "./Auth/PasswordRecoveryForm";
 
 export * from "./Molecules/Alert";
 
+export * from "./Organisms/BusinessMainPage";
+export * from "./Organisms/BusinessSidebarNav";
+
 export * from "./FormInputs/Toggle";
 export * from "./FormInputs/Buttons";
 export * from "./FormInputs/FormText";

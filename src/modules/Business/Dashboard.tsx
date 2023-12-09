@@ -1,10 +1,11 @@
 import { FC } from "react";
+import { BusinessMainPage } from "@components";
 
 const Dashboard: FC = () => {
   return (
-    <div>
+    <BusinessMainPage>
       <h1>Dashboard</h1>
-    </div>
+    </BusinessMainPage>
   );
 };
 

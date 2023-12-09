@@ -17,7 +17,6 @@ const Login: FC = () => {
 
   const handleLogin = async (email: string, password: string) => {
     const response = await login(email, password);
-    console.log(response);
 
     if (response.isError || !response.data) {
       alertService.error(
