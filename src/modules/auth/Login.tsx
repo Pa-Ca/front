@@ -1,12 +1,55 @@
 import { FC, useEffect } from "react";
+import { UserRole } from "@objects";
 import { useNavigate } from "react-router-dom";
+import { alertService, login } from "@services";
+import { useAppDispatch } from "src/store/hooks";
 import { LoginForm, LinkText } from "@components";
+import { authLogin } from "src/store/slices/auth";
+import { setClient } from "src/store/slices/client";
 import logo from "../../assets/images/pa-ca-icon.png";
+import { setBusiness } from "src/store/slices/business";
 import { Carousel, IconButton } from "@material-tailwind/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const Login: FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const handleLogin = async (email: string, password: string) => {
+    const response = await login(email, password);
+    console.log(response);
+
+    if (response.isError || !response.data) {
+      alertService.error(
+        "Error al iniciar sesión",
+        response.error?.message ?? response.exception?.message,
+        { autoClose: false }
+      );
+      return;
+    }
+
+    dispatch(
+      authLogin({
+        logged: true,
+        token: response.data?.token,
+        refresh: response.data?.refresh,
+        user: {
+          email,
+          verified: false,
+          id: response.data.id,
+          role: response.data?.role,
+        },
+      })
+    );
+
+    if (response.data.role === UserRole.CLIENT) {
+      dispatch(setClient(response.data.client!));
+      navigate("/home");
+    } else {
+      dispatch(setBusiness(response.data.business!));
+      navigate("/business");
+    }
+  };
 
   useEffect(() => {
     document.title = "Iniciar Sesión - Pa'ca";
@@ -27,11 +70,9 @@ const Login: FC = () => {
             >
               ¡Bienvenido!
             </h1>
-
-            <p className="text-gray-700 text-lg mt-2">Inicia sesión para continuar</p>
           </div>
 
-          <LoginForm />
+          <LoginForm onSubmit={(values) => handleLogin(values.email, values.password)} />
 
           <span className="text-sm w-full text-center mt-2">
             ¿No tienes una cuenta?{" "}

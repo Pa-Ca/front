@@ -1,4 +1,6 @@
-import user from "./slices/user";
+import auth from "./slices/auth";
+import client from "./slices/client";
+import business from "./slices/business";
 import storage from "redux-persist/lib/storage";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import {
@@ -14,12 +16,12 @@ import {
 } from "redux-persist";
 
 // Combine the reducers into a single root reducer
-const reducer = combineReducers({ user });
+const reducer = combineReducers({ auth, client, business });
 
 // Create the configuration object for redux-persist
 const persistConfig = {
   storage,
-  version: 1, // Change this number if you want to discard the persisted state (e.g. after a new redux state object is added  )
+  version: 4, // Change this number if you want to discard the persisted state (e.g. after a new redux state object is added  )
   key: "root",
   migrate: (state: PersistedState) => {
     if (state && state._persist.version !== persistConfig.version) {

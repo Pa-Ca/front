@@ -23,6 +23,7 @@ const PasswordRecovery: FC = () => {
             <img src={logo} alt="Pa'ca logo" width="75" height="75" />
             <div
               className="group flex items-center gap-2 mt-2 cursor-pointer"
+              style={{ width: "fit-content" }}
               onClick={() => navigate(-1)}
             >
               <div className="flex p-2 rounded-full bg-orange-50 group-hover:bg-orange-100 items-center justify-center">

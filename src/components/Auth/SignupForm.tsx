@@ -1,9 +1,10 @@
 import { FC } from "react";
 import * as Yup from "yup";
-import { FormCheckbox } from "@components";
 import { Formik, FormikProps } from "formik";
+import { Toggle } from "../FormInputs/Toggle";
 import { useNavigate } from "react-router-dom";
 import { FormText } from "../FormInputs/FormText";
+import { FormCheckbox } from "../FormInputs/FormCheckbox";
 import { LinkText, PrimaryButton } from "../FormInputs/Buttons";
 
 export interface SignupFormValues {
@@ -11,6 +12,8 @@ export interface SignupFormValues {
   email: string;
   terms: boolean;
   password: string;
+  lastname: string;
+  isClient: boolean;
   confirmPassword: string;
 }
 interface FormInterface {
@@ -22,6 +25,15 @@ const Form: FC<FormInterface> = ({ formik }) => {
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">
       <div className="flex flex-col gap-4">
+        <Toggle
+          id="isClient"
+          name="isClient"
+          option1="Cliente"
+          option2="Restaurante"
+          checked={formik.values.isClient}
+          onChange={(e) => formik.setFieldValue("isClient", e.target.checked)}
+        />
+
         <div className="flex flex-col lg:flex-row gap-4 w-full">
           <FormText
             id="name"
@@ -36,6 +48,42 @@ const Form: FC<FormInterface> = ({ formik }) => {
             containerClassname="flex-1"
           />
 
+          {!formik.values.isClient && (
+            <FormText
+              id="email"
+              name="email"
+              autoComplete="email"
+              label="Correo"
+              value={formik.values.email}
+              error={
+                formik.touched.email && formik.errors.email
+                  ? formik.errors.email
+                  : undefined
+              }
+              onChange={formik.handleChange}
+              containerClassname="flex-1"
+            />
+          )}
+
+          {formik.values.isClient && (
+            <FormText
+              id="lastname"
+              name="lastname"
+              autoComplete="family-name"
+              label="Apellido"
+              value={formik.values.lastname}
+              error={
+                formik.touched.lastname && formik.errors.lastname
+                  ? formik.errors.lastname
+                  : undefined
+              }
+              onChange={formik.handleChange}
+              containerClassname="flex-1"
+            />
+          )}
+        </div>
+
+        {formik.values.isClient && (
           <FormText
             id="email"
             name="email"
@@ -50,7 +98,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
             onChange={formik.handleChange}
             containerClassname="flex-1"
           />
-        </div>
+        )}
 
         <FormText
           id="password"
@@ -126,6 +174,10 @@ export const SignupForm: FC<SignupFormProps> = ({ onSubmit = () => {} }) => {
     password: Yup.string().required("Este campo es requerido"),
     confirmPassword: Yup.string().required("Este campo es requerido"),
     terms: Yup.boolean().oneOf([true], "Debes aceptar los términos y condiciones"),
+    lastname: Yup.string().when("isClient", {
+      is: (isClient: boolean) => isClient,
+      then: () => Yup.string().required("Este campo es requerido"),
+    }),
   });
 
   return (
@@ -135,6 +187,8 @@ export const SignupForm: FC<SignupFormProps> = ({ onSubmit = () => {} }) => {
         email: "",
         terms: false,
         password: "",
+        lastname: "",
+        isClient: true,
         confirmPassword: "",
       }}
       validationSchema={validationSchema}

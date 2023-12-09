@@ -1,7 +1,10 @@
-import Login from "./modules/auth/Login";
-import Signup from "./modules/auth/Signup";
-import PasswordRecovery from "./modules/auth/PasswordRecovery";
-import TermsAndConditions from "./modules/auth/TermsAndConditions";
+import { UserRole } from "@objects";
+import Login from "./modules/Auth/Login";
+import Home from "./modules/Client/Home";
+import Signup from "./modules/Auth/Signup";
+import Dashboard from "./modules/Business/Dashboard";
+import PasswordRecovery from "./modules/Auth/PasswordRecovery";
+import TermsAndConditions from "./modules/Auth/TermsAndConditions";
 
 interface AppRoute {
   /**
@@ -12,6 +15,10 @@ interface AppRoute {
    * If true, the route is only accessible if the user is authenticated
    */
   auth: boolean;
+  /**
+   * Role
+   */
+  role?: UserRole;
   /**
    * Template to render
    */
@@ -24,6 +31,12 @@ const AppRoutes: AppRoute[] = [
   { path: "/password-recovery", element: <PasswordRecovery />, auth: false },
   { path: "/terms-and-conditions", element: <TermsAndConditions />, auth: false },
   { path: "/*", element: <Login />, auth: false },
+
+  { path: "/dashboard", element: <Dashboard />, auth: true, role: UserRole.BUSINESS },
+  { path: "/*", element: <Dashboard />, auth: true, role: UserRole.BUSINESS },
+
+  { path: "/home", element: <Home />, auth: true, role: UserRole.CLIENT },
+  { path: "/*", element: <Home />, auth: true, role: UserRole.CLIENT },
 ];
 
 export default AppRoutes;
