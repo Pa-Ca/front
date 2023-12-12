@@ -5,6 +5,9 @@ import Signup from "./modules/Auth/Signup";
 import Dashboard from "./modules/Business/Dashboard";
 import PasswordRecovery from "./modules/Auth/PasswordRecovery";
 import TermsAndConditions from "./modules/Auth/TermsAndConditions";
+import Profile from "./modules/Business/Profile";
+import Products from "./modules/Business/Products";
+import Reserves from "./modules/Business/Reserves";
 
 interface AppRoute {
   /**
@@ -32,11 +35,51 @@ const AppRoutes: AppRoute[] = [
   { path: "/terms-and-conditions", element: <TermsAndConditions />, auth: false },
   { path: "/*", element: <Login />, auth: false },
 
-  { path: "/dashboard", element: <Dashboard />, auth: true, role: UserRole.BUSINESS },
-  { path: "/*", element: <Dashboard />, auth: true, role: UserRole.BUSINESS },
+  // Business pages
+  {
+    path: "/business",
+    role: UserRole.BUSINESS,
+    element: <Dashboard />,
+    auth: true,
+  },
+  {
+    path: "/business/profile",
+    role: UserRole.BUSINESS,
+    element: <Profile />,
+    auth: true,
+  },
+  {
+    path: "/business/products",
+    role: UserRole.BUSINESS,
+    element: <Products />,
+    auth: true,
+  },
+  {
+    path: "/business/reserves",
+    role: UserRole.BUSINESS,
+    element: <Reserves />,
+    auth: true,
+  },
+  {
+    path: "/*",
+    element: <Dashboard />,
+    role: UserRole.BUSINESS,
+    auth: true,
+  },
 
-  { path: "/home", element: <Home />, auth: true, role: UserRole.CLIENT },
-  { path: "/*", element: <Home />, auth: true, role: UserRole.CLIENT },
+  // Client pages
+  {
+    path: "/home",
+    element: <Home />,
+    role: UserRole.CLIENT,
+    auth: true,
+  },
+  {
+    path: "/*",
+    element: <Home />,
+    role: UserRole.CLIENT,
+    auth: true,
+  },
 ];
 
 export default AppRoutes;

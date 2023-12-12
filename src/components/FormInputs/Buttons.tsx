@@ -44,7 +44,7 @@ export const SecondaryButton: FC<ButtonProps> = ({
         buttonClassname,
         className,
         disabled ? "pointer-events-none opacity-50" : "",
-        "bg-white focus-visible:outline-orange-600 text-orange-700"
+        "bg-white focus-visible:outline-orange-600 text-gray-800"
       )}
       {...props}
     >

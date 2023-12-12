@@ -1,8 +1,8 @@
 import { FC } from "react";
 import * as Yup from "yup";
-import { Formik, FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
 import { FormText } from "../FormInputs/FormText";
+import { Formik, FormikHelpers, FormikProps } from "formik";
 import { LinkText, PrimaryButton } from "../FormInputs/Buttons";
 
 export interface LoginFormValues {
@@ -65,7 +65,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
 };
 
 interface LoginFormProps {
-  onSubmit?: (prop: LoginFormValues) => void;
+  onSubmit?: (prop: LoginFormValues, formik: FormikHelpers<LoginFormValues>) => void;
 }
 export const LoginForm: FC<LoginFormProps> = ({ onSubmit = () => {} }) => {
   // Validations with Yup for Formik form
@@ -78,9 +78,9 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit = () => {} }) => {
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={validationSchema}
-      onSubmit={(values, { resetForm }) => {
-        onSubmit(values);
-        resetForm();
+      onSubmit={(values, formik) => {
+        onSubmit(values, formik);
+        formik.resetForm();
       }}
     >
       {(formik) => <Form formik={formik} />}

@@ -1,6 +1,8 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { UserRole } from "@objects";
+import { randomImages } from "@utils";
 import { useNavigate } from "react-router-dom";
+import { getBusinessBranches } from "@services";
 import { alertService, login } from "@services";
 import { useAppDispatch } from "src/store/hooks";
 import { LoginForm, LinkText } from "@components";
@@ -8,12 +10,14 @@ import { authLogin } from "src/store/slices/auth";
 import { setClient } from "src/store/slices/client";
 import logo from "../../assets/images/pa-ca-icon.png";
 import { setBusiness } from "src/store/slices/business";
+import { setBranches } from "src/store/slices/branches";
 import { Carousel, IconButton } from "@material-tailwind/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const Login: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [images, setImages] = useState<string[]>([]);
 
   const handleLogin = async (email: string, password: string) => {
     const response = await login(email, password);
@@ -27,28 +31,51 @@ const Login: FC = () => {
       return;
     }
 
-    dispatch(
-      authLogin({
-        logged: true,
-        token: response.data?.token,
-        refresh: response.data?.refresh,
-        user: {
-          email,
-          verified: false,
-          id: response.data.id,
-          role: response.data?.role,
-        },
-      })
-    );
+    const auth = {
+      logged: true,
+      token: response.data?.token,
+      refresh: response.data?.refresh,
+      user: {
+        email,
+        verified: false,
+        id: response.data.id,
+        role: response.data?.role,
+      },
+    };
 
+    // User is a client
     if (response.data.role === UserRole.CLIENT) {
+      dispatch(authLogin(auth));
       dispatch(setClient(response.data.client!));
       navigate("/home");
-    } else {
+    }
+
+    // User is a business
+    else {
+      // Get business branches
+      const branchesResponse = await getBusinessBranches(
+        response.data.business!.id,
+        response.data.token
+      );
+      if (branchesResponse.isError || !branchesResponse.data) {
+        alertService.error(
+          "Error al obtener sucursales",
+          branchesResponse.error?.message ?? branchesResponse.exception?.message,
+          { autoClose: false }
+        );
+        return;
+      }
+
+      dispatch(authLogin(auth));
       dispatch(setBusiness(response.data.business!));
+      dispatch(setBranches(branchesResponse.data.branches));
       navigate("/business");
     }
   };
+
+  useEffect(() => {
+    setImages(randomImages());
+  }, []);
 
   useEffect(() => {
     document.title = "Iniciar Sesión - Pa'ca";
@@ -108,31 +135,14 @@ const Login: FC = () => {
             </IconButton>
           )}
         >
-          <img
-            src="https://th.bing.com/th/id/R.0dd2e89abaafdedb2553d215359b4237?rik=6abZ%2bYNGczRriQ&riu=http%3a%2f%2fwww.trbimg.com%2fimg-5b8f2874%2fturbine%2fsd-et-dining-inside-out-20180801&ehk=8MSHG4Zn4vWV8BV0%2fUY7%2bhHvDgUHF3rrJ%2bGoaYvH8Qg%3d&risl=&pid=ImgRaw&r=0"
-            alt="image 1"
-            className="h-full w-full object-cover"
-          />
-          <img
-            src="https://th.bing.com/th/id/R.8609a0e548432f55343dea90b7a30ca3?rik=UtoLG409Pt2%2btQ&pid=ImgRaw&r=0"
-            alt="image 2"
-            className="h-full w-full object-cover"
-          />
-          <img
-            src="https://nbcconferencecentre.com/content/uploads/sites/2/2018/02/2017121400120-RubenMay-_RU18490.jpg"
-            alt="image 3"
-            className="h-full w-full object-cover"
-          />
-          <img
-            src="https://th.bing.com/th/id/R.63fd2fb897e2be052f18f0e4d2aeae90?rik=LkXVO5j%2fFYU4tw&riu=http%3a%2f%2fwww.frogpondvillage.com%2fwp-content%2fuploads%2f2019%2f06%2f155.jpg&ehk=JZmlD1dxG3D7bHojY3SwgkWW3WC8jKL%2b0G2HRBL2vaM%3d&risl=&pid=ImgRaw&r=0"
-            alt="image 4"
-            className="h-full w-full object-cover"
-          />
-          <img
-            src="https://thearchitectsdiary.com/wp-content/uploads/2018/06/Best-Restaurant-Interior-Design-In-India-4.jpg"
-            alt="image 5"
-            className="h-full w-full object-cover"
-          />
+          {images.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={`image-${index}`}
+              className="h-full w-full object-cover"
+            />
+          ))}
         </Carousel>
       </div>
     </div>

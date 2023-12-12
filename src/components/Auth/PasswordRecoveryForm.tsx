@@ -1,8 +1,8 @@
 import { FC } from "react";
 import * as Yup from "yup";
-import { Formik, FormikProps } from "formik";
 import { FormText } from "../FormInputs/FormText";
 import { PrimaryButton } from "../FormInputs/Buttons";
+import { Formik, FormikHelpers, FormikProps } from "formik";
 
 export interface PasswordRecoveryFormValues {
   email: string;
@@ -37,7 +37,10 @@ const Form: FC<FormInterface> = ({ formik }) => {
 };
 
 interface PasswordRecoveryFormProps {
-  onSubmit?: (prop: PasswordRecoveryFormValues) => void;
+  onSubmit?: (
+    prop: PasswordRecoveryFormValues,
+    formik: FormikHelpers<PasswordRecoveryFormValues>
+  ) => void;
 }
 export const PasswordRecoveryForm: FC<PasswordRecoveryFormProps> = ({
   onSubmit = () => {},
@@ -51,9 +54,9 @@ export const PasswordRecoveryForm: FC<PasswordRecoveryFormProps> = ({
     <Formik
       initialValues={{ email: "" }}
       validationSchema={validationSchema}
-      onSubmit={(values, { resetForm }) => {
-        onSubmit(values);
-        resetForm();
+      onSubmit={(values, formik) => {
+        onSubmit(values, formik);
+        formik.resetForm();
       }}
     >
       {(formik) => <Form formik={formik} />}

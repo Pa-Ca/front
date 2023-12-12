@@ -1,10 +1,10 @@
 import { FC } from "react";
 import * as Yup from "yup";
-import { Formik, FormikProps } from "formik";
 import { Toggle } from "../FormInputs/Toggle";
 import { useNavigate } from "react-router-dom";
 import { FormText } from "../FormInputs/FormText";
 import { FormCheckbox } from "../FormInputs/FormCheckbox";
+import { Formik, FormikHelpers, FormikProps } from "formik";
 import { LinkText, PrimaryButton } from "../FormInputs/Buttons";
 
 export interface SignupFormValues {
@@ -45,7 +45,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
               formik.touched.name && formik.errors.name ? formik.errors.name : undefined
             }
             onChange={formik.handleChange}
-            containerClassname="flex-1"
+            containerClassName="flex-1"
           />
 
           {!formik.values.isClient && (
@@ -61,7 +61,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
                   : undefined
               }
               onChange={formik.handleChange}
-              containerClassname="flex-1"
+              containerClassName="flex-1"
             />
           )}
 
@@ -78,7 +78,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
                   : undefined
               }
               onChange={formik.handleChange}
-              containerClassname="flex-1"
+              containerClassName="flex-1"
             />
           )}
         </div>
@@ -96,7 +96,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
                 : undefined
             }
             onChange={formik.handleChange}
-            containerClassname="flex-1"
+            containerClassName="flex-1"
           />
         )}
 
@@ -164,7 +164,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
 };
 
 interface SignupFormProps {
-  onSubmit?: (prop: SignupFormValues) => void;
+  onSubmit?: (prop: SignupFormValues, formik: FormikHelpers<SignupFormValues>) => void;
 }
 export const SignupForm: FC<SignupFormProps> = ({ onSubmit = () => {} }) => {
   // Validations with Yup for Formik form
@@ -192,9 +192,9 @@ export const SignupForm: FC<SignupFormProps> = ({ onSubmit = () => {} }) => {
         confirmPassword: "",
       }}
       validationSchema={validationSchema}
-      onSubmit={(values, { resetForm }) => {
-        onSubmit(values);
-        resetForm();
+      onSubmit={(values, formik) => {
+        onSubmit(values, formik);
+        formik.resetForm();
       }}
     >
       {(formik) => <Form formik={formik} />}

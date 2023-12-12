@@ -6,7 +6,10 @@ interface BusinessMainPageProps {
 }
 export const BusinessMainPage: FC<BusinessMainPageProps> = ({ children }) => {
   return (
-    <div className="flex min-h-[100vh] min-w-[97vw] overflow-hidden pl-20">
+    <div
+      style={{ scrollbarGutter: "stable" }}
+      className="flex flex-col h-[100vh] w-[100vw] overflow-y-auto overlflow-x-hidden p-8 pl-16 sm:pl-28 pr-4 sm:pr-8"
+    >
       <BusinessSidebarNav />
 
       {children}

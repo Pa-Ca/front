@@ -4,18 +4,18 @@ import { FC } from "react";
 interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   label: string;
   required?: boolean;
-  containerClassname?: string;
+  containerClassName?: string;
 }
 export const FormLabel: FC<FormLabelProps> = ({
   label,
   htmlFor,
   required,
   className = "",
-  containerClassname = "",
+  containerClassName = "",
   ...props
 }) => {
   return (
-    <div className={classNames("flex justify-between", containerClassname)}>
+    <div className={classNames("flex justify-between", containerClassName)}>
       <div>
         <label
           {...props}

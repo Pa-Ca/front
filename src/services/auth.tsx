@@ -76,7 +76,6 @@ export const login = async (
 ): Promise<FetchResponse<LoginResponseDTO>> => {
   // FAKE LOGIN - DELETE THIS IN PRODUCTION
   console.log("[API] Login");
-  console.log(email.split("@")[1]);
   const data = randomLoginResponse(email.split("@")[1] !== "business.com");
   return { data, isError: false };
   // -------------------------------------------

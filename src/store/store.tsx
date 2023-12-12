@@ -1,5 +1,6 @@
 import auth from "./slices/auth";
 import client from "./slices/client";
+import branches from "./slices/branches";
 import business from "./slices/business";
 import storage from "redux-persist/lib/storage";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
@@ -16,7 +17,7 @@ import {
 } from "redux-persist";
 
 // Combine the reducers into a single root reducer
-const reducer = combineReducers({ auth, client, business });
+const reducer = combineReducers({ auth, client, business, branches });
 
 // Create the configuration object for redux-persist
 const persistConfig = {

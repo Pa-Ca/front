@@ -7,10 +7,10 @@ interface FormCheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> 
   name: string;
   label?: string;
   ref?: React.Ref<HTMLInputElement>;
-  containerClassname?: string;
-  inputClassname?: string;
-  labelContainerClassname?: string;
-  labelClassname?: string;
+  containerClassName?: string;
+  inputClassName?: string;
+  labelcontainerClassName?: string;
+  labelClassName?: string;
   error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
 }
 export const FormCheckbox: FC<FormCheckboxProps> = ({
@@ -18,15 +18,15 @@ export const FormCheckbox: FC<FormCheckboxProps> = ({
   name,
   error,
   className,
-  labelClassname,
-  inputClassname,
-  containerClassname,
-  labelContainerClassname,
+  labelClassName,
+  inputClassName,
+  containerClassName,
+  labelcontainerClassName,
   ref,
   ...props
 }) => {
   return (
-    <div className={containerClassname}>
+    <div className={containerClassName}>
       <div className="flex items-center">
         <input
           {...props}
@@ -35,15 +35,15 @@ export const FormCheckbox: FC<FormCheckboxProps> = ({
           type="checkbox"
           className={classNames(
             "peer h-4 w-4 text-orange-700 focus:ring-orange-700 border-gray-300 shadow rounded",
-            inputClassname
+            inputClassName
           )}
         />
 
         <FormLabel
           label={label}
           htmlFor={name}
-          className={classNames("ml-2 text-sm", labelClassname)}
-          containerClassname={labelContainerClassname}
+          className={classNames("ml-2 text-sm", labelClassName)}
+          containerClassName={labelcontainerClassName}
         />
       </div>
 

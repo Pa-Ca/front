@@ -1,106 +1,25 @@
 import { v4 } from "uuid";
-import { BusinessInterface, ClientInterface, Tier, UserRole } from "@objects";
+import { BRANCH_TYPES } from "./branchTypes";
+import { BRANCH_LOCATIONS } from "./branchLocations";
+import { loremIpsum, name, surname, fullname } from "react-lorem-ipsum";
+import {
+  Tier,
+  Duration,
+  UserRole,
+  LocalTime,
+  TableInterace,
+  ClientInterface,
+  BranchInterface,
+  BusinessInterface,
+  DefaultTaxInterface,
+  GuestInterface,
+  TaxInterface,
+  SaleProductInterface,
+  SaleInterface,
+} from "@objects";
 
 const PHONES = ["0424", "0414", "0412", "0416"];
-const NAMES = [
-  "Daleyza Arellano",
-  "Kellan Rowe",
-  "Matilda Boone",
-  "Mauricio Duarte",
-  "Kynlee Blankenship",
-  "Ernesto Chung",
-  "Rivka Randall",
-  "Trenton Michael",
-  "Aubriella Boyd",
-  "Dean Bravo",
-  "Amoura Harvey",
-  "Cayden Michael",
-  "Aubriella Cervantes",
-  "Kamari Arnold",
-  "Finley Lucas",
-  "Chance McCarthy",
-  "Kira Gardner",
-  "Alan Delacruz",
-  "Celine Miller",
-  "Benjamin Jacobson",
-  "Royal Maynard",
-  "Landry Allen",
-  "Riley Fuller",
-  "Andre McIntyre",
-  "Rebekah Simpson",
-  "Elliott Dyer",
-  "Estrella Rivers",
-  "Bear Keith",
-  "Elyse Johnson",
-  "Noah Avery",
-  "Meghan Cantu",
-  "Anakin Vaughn",
-  "Reign Oliver",
-  "Karson Hail",
-  "Lainey Orozco",
-  "Keanu Pruitt",
-  "Brylee Ayers",
-  "Ulises Benitez",
-  "Aliza Franklin",
-  "Simon Melendez",
-  "Bethany Shah",
-  "Zain Ware",
-  "Eileen Salgado",
-  "Trace Herring",
-  "Denver Fitzpatrick",
-  "Blaze Morgan",
-  "Delilah Reilly",
-  "Alvaro Case",
-  "Cleo Pitts",
-  "Trey Cobb",
-  "Aviana Johnson",
-  "Noah Reese",
-  "Rosemary Walls",
-  "Larry Cole",
-  "Margaret Peterson",
-  "Santiago Randall",
-  "Christina Banks",
-  "Martin Henson",
-  "Kinslee Cummings",
-  "Raiden Zhang",
-  "Sarai Felix",
-  "Rodney Moran",
-  "Celeste Calhoun",
-  "Gary Lam",
-  "Karina Hudson",
-  "Peter McMahon",
-  "Belen Villanueva",
-  "Huxley Clay",
-  "Aliana Simon",
-  "Zayne Acosta",
-  "Kaia Tyler",
-  "Emmitt Kramer",
-  "Hanna Gomez",
-  "Isaiah Lyons",
-  "Kenzie Valentine",
-  "Demetrius Rasmussen",
-  "Esperanza Christensen",
-  "Gregory Deleon",
-  "Gabrielle Bender",
-  "Zavier Hebert",
-  "Kyleigh Abbott",
-  "Kohen Cervantes",
-  "Aylin Gould",
-  "Blaine Brock",
-  "Jada Hogan",
-  "Sonny Greene",
-  "Selena Benson",
-  "Desmond Cole",
-  "Margaret Sosa",
-  "Emir Merritt",
-  "Kaisley Lawson",
-  "Lane Salinas",
-  "Royalty Lyons",
-  "Cyrus Acevedo",
-  "Ashlynn Orr",
-  "Benicio Hess",
-  "Kaliyah McCullough",
-];
+const TAXES_NAME = ["IVA", "ISLR", "IGTF", "IPostel"];
 const ADDRESSES = [
   "80999 Riggs Forest Suite 844",
   "Brendaside, MS 90559",
@@ -303,22 +222,144 @@ const ADDRESSES = [
   "654 Lawrence Port",
   "Wendyside, MN 41554",
 ];
+const BRANCHE_NAMES = [
+  "Sabores del Mar",
+  "Café de la Plaza",
+  "El Jardín Escondido",
+  "La Cocina de la Abuela",
+  "Bocado Celestial",
+  "Rincón Gourmet",
+  "Delicias Andinas",
+  "Sabor Tropical",
+  "Casa del Sol",
+  "El Paladar Exquisito",
+  "La Pizzería de Luigi",
+  "Bistro Elegante",
+  "El Asador de Juan",
+  "La Parrilla del Chef",
+  "El Oasis Vegetariano",
+  "La Trattoria Auténtica",
+  "El Bodegón Criollo",
+  "La Cuchara Dorada",
+  "El Refugio del Sibarita",
+  "La Taberna del Gourmet",
+];
+const PRODUCT_NAMES = [
+  "Ensalada César",
+  "Pizza Margherita",
+  "Hamburguesa de ternera",
+  "Sopa de pollo",
+  "Pasta Carbonara",
+  "Sushi de atún",
+  "Tacos de carnitas",
+  "Paella Valenciana",
+  "Filete a la pimienta",
+  "Pollo Tikka Masala",
+  "Mojito",
+  "Margarita",
+  "Café Americano",
+  "Té verde",
+  "Batido de fresa",
+  "Jugo de naranja",
+  "Cerveza rubia",
+  "Vino tinto Merlot",
+  "Agua mineral",
+  "Refresco de cola",
+  "Tarta de manzana",
+  "Helado de vainilla",
+  "Brownie de chocolate",
+  "Flan de huevo",
+  "Pastel de queso",
+  "Mousse de limón",
+  "Galletas de avena",
+  "Tiramisú",
+  "Crepes con Nutella",
+  "Fruta fresca",
+];
+const IMAGES = [
+  "https://th.bing.com/th/id/R.0dd2e89abaafdedb2553d215359b4237?rik=6abZ%2bYNGczRriQ&riu=http%3a%2f%2fwww.trbimg.com%2fimg-5b8f2874%2fturbine%2fsd-et-dining-inside-out-20180801&ehk=8MSHG4Zn4vWV8BV0%2fUY7%2bhHvDgUHF3rrJ%2bGoaYvH8Qg%3d&risl=&pid=ImgRaw&r=0",
+  "https://th.bing.com/th/id/R.8609a0e548432f55343dea90b7a30ca3?rik=UtoLG409Pt2%2btQ&pid=ImgRaw&r=0",
+  "https://nbcconferencecentre.com/content/uploads/sites/2/2018/02/2017121400120-RubenMay-_RU18490.jpg",
+  "https://th.bing.com/th/id/R.63fd2fb897e2be052f18f0e4d2aeae90?rik=LkXVO5j%2fFYU4tw&riu=http%3a%2f%2fwww.frogpondvillage.com%2fwp-content%2fuploads%2f2019%2f06%2f155.jpg&ehk=JZmlD1dxG3D7bHojY3SwgkWW3WC8jKL%2b0G2HRBL2vaM%3d&risl=&pid=ImgRaw&r=0",
+  "https://thearchitectsdiary.com/wp-content/uploads/2018/06/Best-Restaurant-Interior-Design-In-India-4.jpg",
+  "https://wallpapercave.com/wp/wp2038281.jpg",
+  "https://i.pinimg.com/originals/78/a9/66/78a9668410539c6addfc3d0325d3d445.jpg",
+  "https://media.architecturaldigest.com/photos/572a34ffe50e09d42bdfb5e0/master/pass/japanese-restaurants-la-01.jpg",
+  "https://media.architecturaldigest.com/photos/5b04347ca7a427430454e50f/master/pass/GettyImages-182977836.jpg",
+  "https://p4.wallpaperbetter.com/wallpaper/386/534/411/restaurant-cafe-appliances-tables-wallpaper-preview.jpg",
+  "https://img.caminofinancial.com/wp-content/uploads/2019/03/08003212/iStock-1073667618.jpg",
+  "https://momento24.co/wp-content/uploads/2020/08/Restaurantes-2.jpg",
+  "https://i.pinimg.com/originals/b9/2e/f8/b92ef8b0fbdd368d67a9733081a99250.jpg",
+  "https://www.hyattrestaurants.com/uploaded/restaurant_banners/restaurant_banner-1588619256.jpg",
+  "http://static7.depositphotos.com/1021014/788/i/450/depositphotos_7888144-stock-photo-interior-of-restaurant.jpg",
+];
 
 export const randomToken = () => v4();
 
-export const randomClient = (userId?: number): ClientInterface => {
-  const randomName = NAMES[Math.floor(Math.random() * NAMES.length)];
-  const [name, surname] = randomName.split(" ");
+export const randomSubArray = <T extends any>(array: T[], n: number) => {
+  const copy = array.slice();
+  const result = [];
 
+  for (let i = 0; i < n; i++) {
+    const randomIndex = Math.floor(Math.random() * copy.length);
+    const element = copy[randomIndex];
+    result.push(element);
+
+    copy.splice(randomIndex, 1);
+  }
+
+  return result;
+};
+
+export const randomPhoneNumber = () => {
+  return `${PHONES[Math.floor(Math.random() * PHONES.length)]}${Math.floor(
+    Math.random() * 90000000 + 1000000
+  )}`;
+};
+
+export const randomLocalTime = (): LocalTime => {
+  const hour = Math.floor(Math.random() * 24)
+    .toString()
+    .padStart(2, "0");
+  const minute = Math.floor(Math.random() * 60)
+    .toString()
+    .padStart(2, "0");
+  const second = Math.floor(Math.random() * 60)
+    .toString()
+    .padStart(2, "0");
+
+  return `${hour}:${minute}:${second}` as LocalTime;
+};
+
+export const randomDuration = (): Duration => {
+  const hour = Math.floor(Math.random() * 24)
+    .toString()
+    .padStart(2, "0");
+  const minute = Math.floor(Math.random() * 60)
+    .toString()
+    .padStart(2, "0");
+  const second = Math.floor(Math.random() * 60)
+    .toString()
+    .padStart(2, "0");
+
+  return `PT${hour}H${minute}M${second}S` as Duration;
+};
+
+export const randomTimestamp = (min?: Date) => {
+  return new Date(
+    Math.floor(Math.random() * (Date.now() - (min?.getTime() ?? 0))) +
+      (min?.getTime() ?? 0)
+  );
+};
+
+export const randomClient = (userId?: number): ClientInterface => {
   return {
     id: Math.floor(Math.random() * 100000),
     userId: userId || Math.floor(Math.random() * 100000),
-    name,
-    surname,
+    name: name(),
+    surname: surname(),
     stripeCustomerId: v4(),
-    phoneNumber: `${PHONES[Math.floor(Math.random() * PHONES.length)]}${Math.floor(
-      Math.random() * 90000000 + 1000000
-    )}`,
+    phoneNumber: randomPhoneNumber(),
     dateOfBirth: `${Math.floor(Math.random() * 30 + 1)}/${Math.floor(
       Math.random() * 11 + 1
     )}/${Math.floor(Math.random() * 20 + 1980)}`,
@@ -327,13 +368,10 @@ export const randomClient = (userId?: number): ClientInterface => {
 };
 
 export const randomBusiness = (userId?: number): BusinessInterface => {
-  const randomName = NAMES[Math.floor(Math.random() * NAMES.length)];
-  const [name, surname] = randomName.split(" ");
-
   return {
     id: Math.floor(Math.random() * 100000),
     userId: userId || Math.floor(Math.random() * 100000),
-    name: `${name} ${surname}`,
+    name: fullname(),
     tier: Object.values(Tier)[Math.floor(Math.random() * Object.values(Tier).length)],
     verified: Math.random() > 0.5,
     phoneNumber: `${PHONES[Math.floor(Math.random() * PHONES.length)]}${Math.floor(
@@ -354,4 +392,132 @@ export const randomLoginResponse = (client?: boolean) => {
     client: isClient ? randomClient(id) : undefined,
     business: isClient ? undefined : randomBusiness(id),
   };
+};
+
+export const randomDefaultTax = (businessId?: number): DefaultTaxInterface => {
+  const isPercentage = Math.random() > 0.5;
+
+  return {
+    id: Math.floor(Math.random() * 100000),
+    businessId: businessId || Math.floor(Math.random() * 100000),
+    name: TAXES_NAME[Math.floor(Math.random() * TAXES_NAME.length)],
+    value: isPercentage ? Math.floor(Math.random() * 20) : Math.floor(Math.random() * 50),
+    isPercentage,
+  };
+};
+
+export const randomTax = (): TaxInterface => {
+  const isPercentage = Math.random() > 0.5;
+
+  return {
+    id: Math.floor(Math.random() * 100000),
+    name: TAXES_NAME[Math.floor(Math.random() * TAXES_NAME.length)],
+    value: isPercentage ? Math.floor(Math.random() * 20) : Math.floor(Math.random() * 50),
+    isPercentage,
+  };
+};
+
+export const randomBranch = (businessId?: number): BranchInterface => ({
+  id: Math.floor(Math.random() * 100000),
+  businessId: businessId || Math.floor(Math.random() * 100000),
+  name: BRANCHE_NAMES[Math.floor(Math.random() * BRANCHE_NAMES.length)],
+  score: Math.floor(Math.random() * 5),
+  capacity: Math.floor(Math.random() * 100),
+  reservationPrice: Math.random() * 100 + 1,
+  mapsLink: "",
+  location: BRANCH_LOCATIONS[Math.floor(Math.random() * BRANCH_LOCATIONS.length)],
+  overview: loremIpsum({ p: 1, random: true })[0],
+  visibility: Math.random() > 0.2,
+  reserveOff: Math.random() > 0.2,
+  phoneNumber: randomPhoneNumber(),
+  type: BRANCH_TYPES[Math.floor(Math.random() * BRANCH_TYPES.length)],
+  hourIn: randomLocalTime(),
+  hourOut: randomLocalTime(),
+  averageReserveTime: randomDuration(),
+  dollarExchange: Math.floor(Math.random() * 10 + 30),
+  deleted: false,
+  defaultTaxes: new Array(Math.floor(Math.random() * 5 + 1))
+    .fill(0)
+    .map(() => randomDefaultTax()),
+});
+
+export const randomTable = (branchId?: number): TableInterace => ({
+  id: Math.floor(Math.random() * 100000),
+  name: Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(4, "0"),
+  branchId: branchId || Math.floor(Math.random() * 100000),
+});
+
+export const randomGuest = (): GuestInterface => ({
+  id: Math.floor(Math.random() * 100000),
+  name: name(),
+  surname: surname(),
+  phoneNumber: randomPhoneNumber(),
+  email: `${name()}.${surname()}@gmail.com`,
+  identityDocument: "V-" + Math.floor(Math.random() * 90000000 + 10000000).toString(),
+});
+
+export const randomSaleProduct = (
+  saleId?: number,
+  productId?: number
+): SaleProductInterface => ({
+  id: Math.floor(Math.random() * 100000),
+  saleId: saleId || Math.floor(Math.random() * 100000),
+  productId: productId || Math.floor(Math.random() * 100000),
+  name: PRODUCT_NAMES[Math.floor(Math.random() * PRODUCT_NAMES.length)],
+  amount: Math.floor(Math.random() * 10 + 1),
+  price: Math.floor(Math.random() * 100 + 1),
+});
+
+export const randomSale = (
+  branchId?: number,
+  tables?: TableInterace[]
+): SaleInterface => {
+  const isClient = Math.random() > 0.5;
+  const client = isClient ? randomClient() : undefined;
+  const guest = isClient ? undefined : randomGuest();
+  const startTime = randomTimestamp();
+  const endTime = randomTimestamp(startTime);
+  const insite = Math.random() > 0.2;
+
+  let saleTables: TableInterace[] = [];
+  if (!!tables && tables.length > 0) {
+    saleTables = randomSubArray(
+      tables,
+      Math.floor(Math.random() * Math.min(5, tables.length) + 1)
+    );
+  } else {
+    saleTables = new Array(Math.floor(Math.random() * 5 + 1))
+      .fill(0)
+      .map(() => randomTable(branchId));
+  }
+
+  return {
+    sale: {
+      id: Math.floor(Math.random() * 100000),
+      branchId: branchId || Math.floor(Math.random() * 100000),
+      clientGuestId: Math.floor(Math.random() * 100000),
+      invoiceId: Math.floor(Math.random() * 100000),
+      clientQuantity: Math.floor(Math.random() * 10 + 1),
+      status: Math.floor(Math.random() * 5),
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
+      dollarExchange: Math.floor(Math.random() * 10 + 30),
+      note: loremIpsum({ p: 1, random: true })[0],
+    },
+    insite: Math.random() > 0.5,
+    guest,
+    client,
+    reservationId: Math.floor(Math.random() * 100000),
+    taxes: new Array(Math.floor(Math.random() * 5 + 1)).fill(0).map(() => randomTax()),
+    tables: insite ? saleTables : [],
+    products: new Array(Math.floor(Math.random() * 5 + 1))
+      .fill(0)
+      .map(() => randomSaleProduct()),
+  };
+};
+
+export const randomImages = (n: number = 5) => {
+  return randomSubArray(IMAGES, n);
 };
