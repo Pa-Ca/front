@@ -28,6 +28,8 @@ import {
   PresentationChartLineIcon,
   ClipboardDocumentCheckIcon,
 } from "@heroicons/react/24/solid";
+import { Modal } from "../Atoms/Modal";
+import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
 
 export const BusinessSidebarNav: FC = () => {
   const location = useLocation();
@@ -38,6 +40,7 @@ export const BusinessSidebarNav: FC = () => {
 
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
   const handleLogout = () => {
     dispatch(authLogout());
@@ -190,7 +193,7 @@ export const BusinessSidebarNav: FC = () => {
           <ListItem
             selected={false}
             className="min-h-[3rem] px-1 sm:px-3"
-            onClick={handleLogout}
+            onClick={() => setOpenLogoutModal(true)}
           >
             <ListItemPrefix>
               <PowerIcon className="h-5 w-5" />
@@ -202,6 +205,26 @@ export const BusinessSidebarNav: FC = () => {
           </ListItem>
         </div>
       </List>
+
+      <Modal open={openLogoutModal} setOpen={setOpenLogoutModal}>
+        <p className="text-xl font-light mb-4">Cerrar Sesión</p>
+
+        <p className="mb-4">¿Estás seguro que deseas salir?</p>
+
+        <div className="flex flex-col-reverse sm:flex-row w-full mt-4 gap-2 justify-between">
+          <SecondaryButton
+            type="button"
+            className="w-full sm:w-40"
+            onClick={() => setOpenLogoutModal(false)}
+          >
+            Cancelar
+          </SecondaryButton>
+
+          <PrimaryButton onClick={handleLogout} type="submit" className="w-full sm:w-40">
+            Cerrar Sesión
+          </PrimaryButton>
+        </div>
+      </Modal>
     </Card>
   );
 };

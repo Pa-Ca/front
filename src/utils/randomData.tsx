@@ -16,6 +16,9 @@ import {
   TaxInterface,
   SaleProductInterface,
   SaleInterface,
+  BranchReservesStatsInterface,
+  BranchSaleStatsInterface,
+  BranchProductStatsInterface,
 } from "@objects";
 
 const PHONES = ["0424", "0414", "0412", "0416"];
@@ -520,4 +523,53 @@ export const randomSale = (
 
 export const randomImages = (n: number = 5) => {
   return randomSubArray(IMAGES, n);
+};
+
+export const randomBranchReservesStats = (): BranchReservesStatsInterface => ({
+  pending: Math.floor(Math.random() * 50),
+  approved: Math.floor(Math.random() * 30),
+  active: Math.floor(Math.random() * 15),
+  percentageFull: Math.floor(Math.random() * 100),
+});
+
+export const randomBranchYearStats = (): BranchSaleStatsInterface[] => {
+  const result: BranchSaleStatsInterface[] = [];
+
+  const currentDate = new Date();
+  let currentValue = Math.random() * 1000;
+  currentDate.setDate(currentDate.getDate() - 365);
+  for (let i = 0; i < 366; i++) {
+    currentValue = Math.max(0, currentValue + Math.random() * 150 - 70);
+    result.push({
+      date: currentDate.toISOString(),
+      total: currentValue,
+      sales: Math.floor(currentValue / (Math.random() * 3 + 10)),
+    });
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return result;
+};
+
+export const randomBestBranchProductStats = (
+  period: number
+): BranchProductStatsInterface[] => {
+  const productos = randomSubArray(PRODUCT_NAMES, 5);
+  const result: BranchProductStatsInterface[] = [];
+
+  const base = period * 35;
+  const variation = period * 7;
+
+  for (let i = 0; i < productos.length; i++) {
+    const sales = Math.floor(Math.random() * variation + base);
+    result.push({
+      name: productos[i],
+      sales,
+      total: sales * (Math.random() * 3 + 5),
+    });
+  }
+  result.sort((a, b) => b.sales - a.sales);
+
+  return result;
 };

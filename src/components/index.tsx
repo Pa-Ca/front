@@ -29,3 +29,6 @@ export * from "./Profile/AccountData";
 export * from "./Profile/EditAccountForm";
 export * from "./Profile/BranchTablesData";
 export * from "./Profile/EditPasswordForm";
+
+export * from "./Charts/BranchSalesChart";
+export * from "./Charts/BranchProductsChart";

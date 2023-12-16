@@ -40,7 +40,7 @@ export const Modal: FC<ModalProps> = ({ open, setOpen, className, style, childre
               <Dialog.Panel
                 style={style}
                 className={classNames(
-                  "relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:p-6",
+                  "relative m-4 sm:m-8 transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:p-6",
                   className
                 )}
               >

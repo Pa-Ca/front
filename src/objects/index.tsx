@@ -4,4 +4,5 @@ export * from "./SaleInterface";
 export * from "./GuestInterface";
 export * from "./ClientInterface";
 export * from "./BranchInterface";
+export * from "./StatsInterfaces";
 export * from "./BusinessInterface";
