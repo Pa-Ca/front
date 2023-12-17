@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { useFetch } from "@hooks";
 import { getBranchSalesStats } from "@services";
@@ -63,10 +63,10 @@ const getTooltip = (date: Time, price: number, sales: number) => {
 };
 
 export const BranchSalesChart: FC = () => {
-  let count = 0;
   const fetch = useFetch();
   const branch = useAppSelector((state) => state.branches.selected);
 
+  const countRef = useRef(0);
   const [chart, setChart] = useState<IChartApi>();
   const [data, setData] = useState<BranchSaleStatsInterface[]>([]);
   const [areaSeries, setAreaSeries] = useState<ISeriesApi<"Area">>();
@@ -76,8 +76,8 @@ export const BranchSalesChart: FC = () => {
 
   useEffect(() => {
     const dataRef = document.getElementById("branch-sale-stats");
-    if (!!dataRef && count === 0) {
-      count += 1;
+    if (!!dataRef && countRef.current === 0) {
+      countRef.current += 1;
 
       // Create chart
       const chart = createChart(dataRef, BRANCH_SALE_STATS_CHART_OPTIONS);
@@ -102,7 +102,7 @@ export const BranchSalesChart: FC = () => {
 
       setData(response.data);
     });
-  }, [branch?.id]);
+  }, [branch?.id, fetch]);
 
   useEffect(() => {
     if (!areaSeries || data.length === 0) return;

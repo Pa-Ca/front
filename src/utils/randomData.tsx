@@ -422,7 +422,7 @@ const PRODUCT_CATEGORY_NAMES = [
 
 export const randomToken = () => v4();
 
-export const randomSubArray = <T extends any>(array: T[], n: number) => {
+export function randomSubArray<T>(array: T[], n: number) {
   const copy = array.slice();
   const result = [];
 
@@ -435,7 +435,7 @@ export const randomSubArray = <T extends any>(array: T[], n: number) => {
   }
 
   return result;
-};
+}
 
 export const randomPhoneNumber = () => {
   return `${PHONES[Math.floor(Math.random() * PHONES.length)]}${Math.floor(
@@ -474,7 +474,7 @@ export const randomDuration = (): Duration => {
 export const randomTimestamp = (min?: Date) => {
   return new Date(
     Math.floor(Math.random() * (Date.now() - (min?.getTime() ?? 0))) +
-      (min?.getTime() ?? 0)
+    (min?.getTime() ?? 0)
   );
 };
 

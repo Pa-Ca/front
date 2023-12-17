@@ -43,7 +43,7 @@ export const ProductCard: FC<ProductCardProps> = ({
 
   useEffect(() => {
     getProductImage(product.id).then((res) => {
-      if (!!res.error) return;
+      if (res.isError) return;
 
       setImage(res.data);
     });

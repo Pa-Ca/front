@@ -164,28 +164,28 @@ interface ProductFormProps {
 export const ProductForm: FC<ProductFormProps> = ({
   initialValues,
   categories,
-  onCancel = () => {},
-  onSubmit = () => {},
+  onCancel = () => { },
+  onSubmit = () => { },
 }) => {
   // Validations with Yup for Formik form
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Este campo es requerido"),
     price: Yup.number().required("Este campo es requerido"),
-    category: Yup.object().test(
+    category: Yup.mixed<ProductCategoryInterface>().test(
       "category",
       "Este campo es requerido",
-      (value: any) => value?.id !== -1
+      (value?: ProductCategoryInterface) => value?.id !== -1
     ),
-    image: Yup.mixed()
+    image: Yup.mixed<File>()
       .test(
         "image",
         "El archivo debe ser una imagen",
-        (value: any) => !value || value?.type?.startsWith("image")
+        (value?: File) => !value || value?.type?.startsWith("image")
       )
       .test(
         "image",
         "El archivo debe pesar menos de 5MB",
-        (value: any) => !value || value?.size < 5 * 1024 * 1024
+        (value?: File) => !value || value?.size < 5 * 1024 * 1024
       ),
   });
 

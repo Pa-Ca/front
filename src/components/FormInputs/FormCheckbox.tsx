@@ -11,13 +11,12 @@ interface FormCheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> 
   inputClassName?: string;
   labelcontainerClassName?: string;
   labelClassName?: string;
-  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
+  error?: string | string[] | FormikErrors<object> | FormikErrors<object>[];
 }
 export const FormCheckbox: FC<FormCheckboxProps> = ({
   label = "",
   name,
   error,
-  className,
   labelClassName,
   inputClassName,
   containerClassName,

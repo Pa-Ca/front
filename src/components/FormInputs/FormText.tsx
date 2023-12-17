@@ -19,7 +19,7 @@ export interface FormTextProps extends React.InputHTMLAttributes<HTMLInputElemen
   labelClassName?: string;
   containerClassName?: string;
   labelcontainerClassName?: string;
-  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
+  error?: string | string[] | FormikErrors<object> | FormikErrors<object>[];
   ref?: React.Ref<HTMLInputElement>;
 }
 export const FormText: FC<FormTextProps> = ({

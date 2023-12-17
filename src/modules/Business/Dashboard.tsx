@@ -44,7 +44,7 @@ const Dashboard: FC = () => {
         setBranchReservesStats(response.data);
       }
     );
-  }, [branch?.id]);
+  }, [branch?.id, fetch]);
 
   useEffect(() => {
     document.title = "Dashboard - Pa'ca";

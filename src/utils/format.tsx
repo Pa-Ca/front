@@ -18,11 +18,12 @@ export const formatLocalTime = (time: LocalTime) => {
 
   const date = new Date();
   date.setHours(hour, minute, second);
+  type digits = "2-digit" | "numeric";
 
   const options = {
     hour12: true,
-    hour: "2-digit" as "2-digit",
-    minute: "2-digit" as "2-digit",
+    hour: "2-digit" as digits,
+    minute: "2-digit" as digits,
   };
   const formatted = date.toLocaleTimeString("en-US", options);
 
@@ -38,10 +39,9 @@ export const formatDuration = (duration: Duration) => {
     .split(":")
     .map(Number);
 
-  if (!!minute) {
-    return `${hour} hora${hour !== 1 ? "s" : ""} y ${minute} minuto${
-      minute !== 1 ? "s" : ""
-    }`;
+  if (minute) {
+    return `${hour} hora${hour !== 1 ? "s" : ""} y ${minute} minuto${minute !== 1 ? "s" : ""
+      }`;
   } else {
     return `${hour} hora${hour !== 1 ? "s" : ""}`;
   }

@@ -20,10 +20,10 @@ interface FormSelectProps<T> {
   labelClassName?: string;
   inputClassName?: string;
   containerClassName?: string;
-  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
+  error?: string | string[] | FormikErrors<object> | FormikErrors<object>[];
   onChange: (value: T) => void;
 }
-export const FormSelect = <T extends any>({
+export function FormSelect<T>({
   id,
   name,
   label,
@@ -35,7 +35,7 @@ export const FormSelect = <T extends any>({
   containerClassName,
   error,
   onChange,
-}: FormSelectProps<T>) => {
+}: FormSelectProps<T>) {
   return (
     <Listbox value={selected.value} onChange={onChange}>
       {({ open }) => (
@@ -126,4 +126,4 @@ export const FormSelect = <T extends any>({
       )}
     </Listbox>
   );
-};
+}

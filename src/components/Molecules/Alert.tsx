@@ -12,7 +12,7 @@ export const Alert: FC<AlertProps> = ({ id = ALERT_DEFAULT_ID, fade = true }) =>
 
   function omit(arr: AlertProps[], key: keyof AlertProps) {
     return arr.map((obj) => {
-      const { [key]: omitted, ...rest } = obj;
+      const { [key]: _, ...rest } = obj;
       return rest;
     });
   }

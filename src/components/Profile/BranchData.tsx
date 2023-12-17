@@ -53,9 +53,11 @@ export const BranchData: FC = () => {
     values: BranchFormValues,
     formik: FormikHelpers<BranchFormValues>
   ) => {
+    if (!business?.id) return;
+
     const branch: BranchInterface = {
       id: 0,
-      businessId: business?.id!,
+      businessId: business.id,
       name: values.name,
       score: 0,
       capacity: +values.capacity,
@@ -95,9 +97,11 @@ export const BranchData: FC = () => {
     values: TaxFormValues,
     formik: FormikHelpers<TaxFormValues>
   ) => {
+    if (!branch?.id || !business?.id) return;
+
     const tax: DefaultTaxInterface = {
       id: 0,
-      businessId: business?.id!,
+      businessId: business.id,
       name: values.name,
       value: +values.value,
       isPercentage: values.type === "Porcentaje",
@@ -113,10 +117,10 @@ export const BranchData: FC = () => {
       }
 
       const updatedBranch = {
-        ...branch!,
-        defaultTaxes: [...branch?.defaultTaxes!, response.data],
+        ...branch,
+        defaultTaxes: [...branch.defaultTaxes, response.data],
       };
-      const branchIndex = branches.findIndex((b) => b.id === branch?.id);
+      const branchIndex = branches.findIndex((b) => b.id === branch.id);
       const updatedBranches = [
         ...branches.slice(0, branchIndex),
         updatedBranch,
@@ -130,8 +134,10 @@ export const BranchData: FC = () => {
   };
 
   const handleTaxDelete = async (taxId: number) => {
+    if (!branch?.id) return;
+
     fetch((token: string) => deleteDefaultTax(taxId, token)).then((response) => {
-      if (!!response.isError) {
+      if (response.isError) {
         alertService.error(
           "Hubo un error al intentar eliminar la tarifa.",
           response.error?.message ?? response.exception?.message
@@ -140,10 +146,10 @@ export const BranchData: FC = () => {
       }
 
       const updatedBranch = {
-        ...branch!,
-        defaultTaxes: branch?.defaultTaxes!.filter((t) => t.id !== taxId)!,
+        ...branch,
+        defaultTaxes: branch.defaultTaxes.filter((t) => t.id !== taxId)!,
       };
-      const branchIndex = branches.findIndex((b) => b.id === branch?.id);
+      const branchIndex = branches.findIndex((b) => b.id === branch.id);
       const updatedBranches = [
         ...branches.slice(0, branchIndex),
         updatedBranch,
@@ -159,11 +165,13 @@ export const BranchData: FC = () => {
     values: BranchFormValues,
     formik: FormikHelpers<BranchFormValues>
   ) => {
+    if (!branch?.id || !business?.id) return;
+
     const updatedBranch: BranchInterface = {
-      id: branch?.id!,
-      businessId: business?.id!,
+      id: branch.id,
+      businessId: business.id,
       name: values.name,
-      score: branch?.score!,
+      score: branch.score,
       capacity: +values.capacity,
       reservationPrice: +values.reservationPrice,
       mapsLink: values.mapsLink,
@@ -176,9 +184,9 @@ export const BranchData: FC = () => {
       hourIn: values.hourIn,
       hourOut: values.hourOut,
       averageReserveTime: values.averageReserveTime,
-      dollarExchange: branch?.dollarExchange!,
+      dollarExchange: branch.dollarExchange,
       deleted: false,
-      defaultTaxes: branch?.defaultTaxes!,
+      defaultTaxes: branch.defaultTaxes,
     };
 
     fetch((token: string) => createBranch(updatedBranch, token)).then((response) => {
@@ -203,7 +211,7 @@ export const BranchData: FC = () => {
   };
 
   useEffect(() => {
-    if (!branch) return;
+    if (!branch?.id) return;
 
     fetch((token: string) => getBranchImages(branch.id, token)).then((response) => {
       if (response.isError || !response.data) return;
@@ -211,7 +219,7 @@ export const BranchData: FC = () => {
       setCarouselKey(Math.random().toString());
       setImages(response.data.images);
     });
-  }, [branch?.id]);
+  }, [branch?.id, fetch]);
 
   return (
     <div className="flex flex-col w-full gap-6 text-lg sm:gap-2 text-sm sm:text-md">

@@ -14,7 +14,7 @@ export interface FormDurationProps {
   labelClassName?: string;
   containerClassName?: string;
   labelcontainerClassName?: string;
-  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
+  error?: string | string[] | FormikErrors<object> | FormikErrors<object>[];
   onChange: (value: Duration) => void;
 }
 export const FormDuration: FC<FormDurationProps> = ({

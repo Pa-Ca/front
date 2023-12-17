@@ -21,10 +21,10 @@ interface FormSearchProps<T> extends React.InputHTMLAttributes<HTMLInputElement>
   defaultOption?: string;
   labelClassName?: string;
   containerClassName?: string;
-  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
+  error?: string | string[] | FormikErrors<object> | FormikErrors<object>[];
   onSelectOption: (value: T) => void;
 }
-export const FormSearch = <T extends any>({
+export function FormSearch<T>({
   name,
   label,
   disabled,
@@ -38,7 +38,7 @@ export const FormSearch = <T extends any>({
   error,
   onSelectOption,
   ...props
-}: FormSearchProps<T>) => {
+}: FormSearchProps<T>) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState("");
@@ -139,7 +139,7 @@ export const FormSearch = <T extends any>({
                   className="group relative cursor-pointer select-none py-2 pl-8 pr-4 text-gray-900 hover:bg-orange-700 hover:text-white"
                   value={option.value}
                 >
-                  {!!option.name ? (
+                  {option.name ? (
                     <span
                       className={classNames(
                         selected.id === option.id ? "font-semibold" : "font-normal",
@@ -179,4 +179,4 @@ export const FormSearch = <T extends any>({
       </div>
     </Listbox>
   );
-};
+}

@@ -61,7 +61,7 @@ export const BranchProductsChart: FC<BranchProductsChartProps> = ({ period }) =>
         setData(response.data);
       }
     );
-  }, [branch?.id, period]);
+  }, [branch?.id, period, fetch]);
 
   return (
     <div className="w-full min-w-[20rem] h-[14rem]">

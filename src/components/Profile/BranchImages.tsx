@@ -20,9 +20,9 @@ export const BranchImages: FC<BranchImagesProps> = ({ images, setImages }) => {
   const [selectedImage, setSelectedImage] = useState(0);
 
   const handleAddImage = () => {
-    if (!newImage) return;
+    if (!branch?.id || !newImage) return;
 
-    fetch((token: string) => addBranchImage(branch?.id!, newImage, token)).then(
+    fetch((token: string) => addBranchImage(branch.id, newImage, token)).then(
       (response) => {
         if (response.isError || !response.data) {
           alertService.error(
@@ -40,9 +40,9 @@ export const BranchImages: FC<BranchImagesProps> = ({ images, setImages }) => {
   };
 
   const handleDeleteImage = () => {
-    if (images.length === 0) return;
+    if (!branch?.id || images.length === 0) return;
 
-    fetch((token: string) => deleteBranchImage(branch?.id!, selectedImage, token)).then(
+    fetch((token: string) => deleteBranchImage(branch.id, selectedImage, token)).then(
       (response) => {
         if (response.isError || !response.data) {
           alertService.error(

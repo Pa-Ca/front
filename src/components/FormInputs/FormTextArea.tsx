@@ -13,7 +13,7 @@ export interface FormTextAreaProps
   labelClassName?: string;
   containerClassName?: string;
   labelcontainerClassName?: string;
-  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
+  error?: string | string[] | FormikErrors<object> | FormikErrors<object>[];
 }
 export const FormTextArea: FC<FormTextAreaProps> = ({
   name,

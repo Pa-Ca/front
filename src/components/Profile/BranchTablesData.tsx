@@ -43,7 +43,7 @@ export const BranchTablesData: FC = () => {
             sales.some((sale) => sale.tables.some((t) => t.id === table.id)))
       )
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [tableSearch, activeSales, tables]);
+  }, [tableSearch, activeSales, tables, sales]);
 
   const paginatedTables = useMemo(() => {
     const start = tablePage * TABLES_PER_PAGE;
@@ -53,12 +53,12 @@ export const BranchTablesData: FC = () => {
   }, [tablePage, filteredTables]);
 
   const handleCreateTable = () => {
-    if (!newTable) return;
+    if (!newTable || !branch?.id) return;
 
     const table: TableInterace = {
       id: 0,
       name: newTable,
-      branchId: branch?.id!,
+      branchId: branch.id,
     };
 
     fetch((token: string) => addBranchTable(table, token)).then((response) => {
@@ -105,7 +105,7 @@ export const BranchTablesData: FC = () => {
 
       setTables(response.data.tables.sort((a, b) => a.name.localeCompare(b.name)));
     });
-  }, [branch?.id]);
+  }, [branch?.id, fetch]);
 
   useEffect(() => {
     if (!branch?.id) return;
@@ -124,7 +124,7 @@ export const BranchTablesData: FC = () => {
         setSales(response.data.ongoingSalesInfo);
       }
     );
-  }, [branch?.id, tables]);
+  }, [branch?.id, tables, fetch]);
 
   return (
     <div className="flex flex-col w-full gap-6 text-lg sm:gap-2 text-sm sm:text-md">

@@ -4,14 +4,15 @@ import { unsetBranches } from "src/store/slices/branches";
 import { unsetBusiness } from "src/store/slices/business";
 import { authLogout, setToken } from "src/store/slices/auth";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
+import { useCallback } from "react";
 
 export const useFetch = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth);
 
-  const fetch = async <T extends any>(
+  const fetch = useCallback(async function fetch<T>(
     fetchFunction: (token: string) => Promise<FetchResponse<T>>
-  ) => {
+  ) {
     try {
       const response = await fetchFunction(auth.token!);
 
@@ -46,7 +47,7 @@ export const useFetch = () => {
     } catch (e) {
       return { error: e as Error, isError: true };
     }
-  };
+  }, [auth, dispatch]);
 
   return fetch;
 };

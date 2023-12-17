@@ -25,8 +25,8 @@ export const AccountData: FC = () => {
   ) => {
     const response = await fetch((token: string) => updateBusiness(values, token));
 
-    if (!!response.isError) {
-      formik.setFieldError("name", response.exception?.message!);
+    if (response.isError) {
+      formik.setFieldError("name", response.exception?.message);
       return;
     }
 
@@ -44,14 +44,16 @@ export const AccountData: FC = () => {
     values: EditPasswordFormValues,
     formik: FormikHelpers<EditPasswordFormValues>
   ) => {
+    if (!auth.user?.email) return;
+
     const response = await updatePassword(
-      auth.user?.email!,
+      auth.user.email,
       values.oldPassword,
       values.newPassword
     );
 
-    if (!!response.isError) {
-      formik.setFieldError("newPassword", response.exception?.message!);
+    if (response.isError) {
+      formik.setFieldError("newPassword", response.exception?.message);
       return;
     }
 
@@ -97,22 +99,25 @@ export const AccountData: FC = () => {
         </SecondaryButton>
       </div>
 
-      <Modal
-        open={editProfile}
-        setOpen={setEditProfile}
-        className="w-full m-8 max-w-[30rem]"
-      >
-        <p className="text-xl font-light mb-4">Editar perfil</p>
+      {!!business && (
+        <Modal
+          open={editProfile}
+          setOpen={setEditProfile}
+          className="w-full m-8 max-w-[30rem]"
+        >
+          <p className="text-xl font-light mb-4">Editar perfil</p>
 
-        <EditAccountForm
-          onSubmit={handleEditProfile}
-          initialValues={{ name: business?.name!, phoneNumber: business?.phoneNumber }}
-        />
+          <EditAccountForm
+            onSubmit={handleEditProfile}
+            initialValues={{ name: business.name, phoneNumber: business.phoneNumber }}
+          />
 
-        <SecondaryButton className="w-full mt-4" onClick={() => setEditProfile(false)}>
-          Cancelar
-        </SecondaryButton>
-      </Modal>
+          <SecondaryButton className="w-full mt-4" onClick={() => setEditProfile(false)}>
+            Cancelar
+          </SecondaryButton>
+        </Modal>
+
+      )}
 
       <Modal
         open={editPassword}

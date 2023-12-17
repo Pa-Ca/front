@@ -2,6 +2,7 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { useFetch } from "@hooks";
 import { FormikHelpers } from "formik";
 import { useAppSelector } from "src/store/hooks";
+import { InboxIcon, TagIcon } from "@heroicons/react/24/outline";
 import { ProductCard } from "src/components/Products/ProductCard";
 import { ProductCategoryInterface, ProductInterface } from "@objects";
 import { PaginationFooter } from "src/components/Molecules/PaginationFooter";
@@ -33,7 +34,6 @@ import {
   ProductFormValues,
   FormSelect,
 } from "@components";
-import { InboxIcon, TagIcon } from "@heroicons/react/24/outline";
 
 const PRODUCTS_PER_PAGE = 24;
 const ACTIONS = [
@@ -49,7 +49,7 @@ const Products: FC = () => {
 
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
-  const [onlyActives, setOnlyActives] = useState(true);
+  const [onlyActives, setOnlyActives] = useState(false);
   const [onlyDelivery, setOnlyDelivery] = useState(false);
   const [onlyHighlights, setOnlyHighlights] = useState(false);
   const [products, setProducts] = useState<ProductInterface[]>([]);
@@ -230,7 +230,7 @@ const Products: FC = () => {
 
   const handleProductDeletion = async (productId: number) => {
     return fetch((token: string) => deleteProduct(productId, token)).then((response) => {
-      if (!!response.isError) {
+      if (response.isError) {
         alertService.error(
           "Hubo un error intentando eliminar el producto.",
           response.error?.message ?? response.exception?.message
@@ -305,7 +305,7 @@ const Products: FC = () => {
     return fetch((token: string) =>
       deleteProductCategory(categorySelected.id, token)
     ).then((response) => {
-      if (!!response.isError) {
+      if (response.isError) {
         alertService.error(
           "Hubo un error intentando eliminar la categoría.",
           response.error?.message ?? response.exception?.message
@@ -334,7 +334,7 @@ const Products: FC = () => {
         setProducts(response.data.products);
       }
     );
-  }, [branch?.id, categories]);
+  }, [branch?.id, categories, fetch]);
 
   useEffect(() => {
     if (!branch?.id) return;
@@ -347,7 +347,7 @@ const Products: FC = () => {
         setCategories(response.data.productCategories);
       }
     );
-  }, [branch?.id]);
+  }, [branch?.id, fetch]);
 
   useEffect(() => {
     document.title = "Productos - Pa'ca";

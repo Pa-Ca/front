@@ -16,7 +16,7 @@ interface FormFileProps extends React.InputHTMLAttributes<HTMLInputElement> {
   description?: string;
   containerClassname?: string;
   labelContainerClassname?: string;
-  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
+  error?: string | string[] | FormikErrors<object> | FormikErrors<object>[];
   onSelectFile: (file?: File) => void;
 }
 export const FormFile: FC<FormFileProps> = ({
@@ -82,7 +82,8 @@ export const FormFile: FC<FormFileProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = (e.target as HTMLInputElement).files?.[0];
-    if (!!file) {
+
+    if (file) {
       onSelectFile(file);
     }
   };
@@ -158,7 +159,7 @@ export const FormFile: FC<FormFileProps> = ({
             className
           )}
         >
-          {!!selected?.name ? (
+          {selected?.name ? (
             <span className="truncate">{selected.name}</span>
           ) : (
             <span className="text-gray-400 truncate">

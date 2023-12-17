@@ -14,7 +14,7 @@ export interface FormLocalTimeProps {
   labelClassName?: string;
   containerClassName?: string;
   labelcontainerClassName?: string;
-  error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
+  error?: string | string[] | FormikErrors<object> | FormikErrors<object>[];
   onChange: (value: LocalTime) => void;
 }
 export const FormLocalTime: FC<FormLocalTimeProps> = ({

@@ -64,7 +64,9 @@ const Profile: FC = () => {
   };
 
   const handleUpdateProfileImage = () => {
-    updateBusinessProfileImage(business?.id!, file).then((response) => {
+    if (!business?.id) return;
+
+    updateBusinessProfileImage(business.id, file).then((response) => {
       if (response.isError) {
         alertService.error(
           "No se pudo actualizar la imagen",

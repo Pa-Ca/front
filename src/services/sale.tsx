@@ -59,19 +59,19 @@ export const getBranchSales = async (
 
   let uri = `${API_ENDPOINT}/branch/${branchId}/sale?page=${pageIndex}&size=${pageSize}`;
 
-  if (!!startTime) {
+  if (startTime) {
     uri = uri.concat(`&startTime=${startTime.toISOString()}`);
   }
-  if (!!endTime) {
+  if (endTime) {
     // Get endDateTime + 1 day
     const endTimePlusOne = new Date(endTime);
     endTimePlusOne.setDate(endTimePlusOne.getDate() + 1);
     uri = uri.concat(`&endTime=${endTimePlusOne.toISOString()}`);
   }
-  if (!!fullname) {
+  if (fullname) {
     uri = uri.concat(`&fullname=${fullname}`);
   }
-  if (!!identityDocument) {
+  if (identityDocument) {
     uri = uri.concat(`&identityDocument=${identityDocument}`);
   }
 
