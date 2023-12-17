@@ -1,11 +1,13 @@
 import { FC, useState } from "react";
 import classNames from "classnames";
+import { Modal } from "../Atoms/Modal";
 import { BranchInterface } from "@objects";
 import { authLogout } from "src/store/slices/auth";
 import logo from "../../assets/images/pa-ca-icon.png";
 import { unsetBusiness } from "src/store/slices/business";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
+import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
 import { setBranchSelected, unsetBranches } from "src/store/slices/branches";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import {
@@ -22,14 +24,13 @@ import {
 } from "@material-tailwind/react";
 import {
   PowerIcon,
+  TicketIcon,
   UserCircleIcon,
   InboxStackIcon,
   BuildingStorefrontIcon,
   PresentationChartLineIcon,
   ClipboardDocumentCheckIcon,
 } from "@heroicons/react/24/solid";
-import { Modal } from "../Atoms/Modal";
-import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
 
 export const BusinessSidebarNav: FC = () => {
   const location = useLocation();
@@ -175,6 +176,18 @@ export const BusinessSidebarNav: FC = () => {
           </ListItemPrefix>
 
           <p className="transition-all opacity-0 group-hover:opacity-100">Productos</p>
+        </ListItem>
+
+        <ListItem
+          className="min-h-[3rem] px-1 sm:px-3"
+          onClick={() => navigate("/business/coupons")}
+          selected={location.pathname === "/business/coupons"}
+        >
+          <ListItemPrefix>
+            <TicketIcon className="h-5 w-5" />
+          </ListItemPrefix>
+
+          <p className="transition-all opacity-0 group-hover:opacity-100">Cupones</p>
         </ListItem>
 
         <div className="flex flex-col h-full justify-end gap-1">

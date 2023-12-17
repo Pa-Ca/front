@@ -81,7 +81,7 @@ export const BranchProductsChart: FC<BranchProductsChartProps> = ({ period }) =>
             type="number"
             domain={[minValue, "auto"]}
             className="!text-xs font-bold"
-            tickFormatter={(value) => `$${value.toFixed(2)}`}
+            tickFormatter={(value) => `$${value.toFixed(0)}`}
           />
           <YAxis
             width={81}

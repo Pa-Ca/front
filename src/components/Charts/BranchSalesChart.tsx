@@ -75,8 +75,6 @@ export const BranchSalesChart: FC = () => {
   );
 
   useEffect(() => {
-    document.title = "Dashboard - Pa'ca";
-
     const dataRef = document.getElementById("branch-sale-stats");
     if (!!dataRef && count === 0) {
       count += 1;

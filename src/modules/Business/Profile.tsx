@@ -41,7 +41,11 @@ const Profile: FC = () => {
   const [openUpdateImageModal, setOpenUpdateImageModal] = useState(false);
 
   const handleSelectImage = (file?: File) => {
-    if (!file) return;
+    if (!file) {
+      setError("");
+      setFile(undefined);
+      return;
+    }
 
     // Verify if the file is an image
     if (!file.type.startsWith("image")) {

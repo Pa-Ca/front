@@ -22,7 +22,12 @@ export * from "./FormInputs/FormCheckbox";
 export * from "./FormInputs/FormTextArea";
 export * from "./FormInputs/FormLocalTime";
 
+export * from "./Products/ProductCard";
+export * from "./Products/ProductForm";
+export * from "./Products/ProductCategoryForm";
+
 export * from "./Profile/TaxForm";
+export * from "./Profile/TableCard";
 export * from "./Profile/BranchData";
 export * from "./Profile/BranchForm";
 export * from "./Profile/AccountData";

@@ -7,18 +7,20 @@ import {
   Duration,
   UserRole,
   LocalTime,
+  TaxInterface,
   TableInterace,
+  SaleInterface,
+  GuestInterface,
   ClientInterface,
   BranchInterface,
+  ProductInterface,
   BusinessInterface,
   DefaultTaxInterface,
-  GuestInterface,
-  TaxInterface,
   SaleProductInterface,
-  SaleInterface,
-  BranchReservesStatsInterface,
   BranchSaleStatsInterface,
   BranchProductStatsInterface,
+  BranchReservesStatsInterface,
+  ProductCategoryInterface,
 } from "@objects";
 
 const PHONES = ["0424", "0414", "0412", "0416"];
@@ -248,6 +250,66 @@ const BRANCHE_NAMES = [
   "La Taberna del Gourmet",
 ];
 const PRODUCT_NAMES = [
+  "Paella Valenciana",
+  "Gazpacho Andaluz",
+  "Tortilla Española",
+  "Enchiladas Verdes",
+  "Chiles Rellenos",
+  "Ceviche de Pescado",
+  "Pisco Sour",
+  "Margarita",
+  "Sangría",
+  "Tacos al Pastor",
+  "Empanadas Argentinas",
+  "Feijoada",
+  "Caipirinha",
+  "Mojito",
+  "Cubano Sandwich",
+  "Ropa Vieja",
+  "Pupusas",
+  "Tamales",
+  "Churrasco",
+  "Parrillada Mixta",
+  "Causa Limeña",
+  "Lomo Saltado",
+  "Aji de Gallina",
+  "Alfajores",
+  "Flan",
+  "Tres Leches",
+  "Churros",
+  "Natilla",
+  "Arroz con Leche",
+  "Tequila Sunrise",
+  "Piña Colada",
+  "Michelada",
+  "Horchata",
+  "Tinto de Verano",
+  "Rebujito",
+  "Fajitas de Pollo",
+  "Guacamole",
+  "Quesadillas",
+  "Nachos con Queso",
+  "Pollo a la Brasa",
+  "Ceviche Mixto",
+  "Anticuchos",
+  "Picarones",
+  "Tarta de Santiago",
+  "Fabada Asturiana",
+  "Cochinita Pibil",
+  "Mole Poblano",
+  "Chimichanga",
+  "Champurrado",
+  "Agua de Jamaica",
+  "Carnitas",
+  "Chiles en Nogada",
+  "Pozole",
+  "Tostadas",
+  "Tamalitos Verdes",
+  "Seco de Cordero",
+  "Tacu Tacu",
+  "Arroz Chaufa",
+  "Parihuela",
+  "Leche de Tigre",
   "Ensalada César",
   "Pizza Margherita",
   "Hamburguesa de ternera",
@@ -255,11 +317,8 @@ const PRODUCT_NAMES = [
   "Pasta Carbonara",
   "Sushi de atún",
   "Tacos de carnitas",
-  "Paella Valenciana",
   "Filete a la pimienta",
   "Pollo Tikka Masala",
-  "Mojito",
-  "Margarita",
   "Café Americano",
   "Té verde",
   "Batido de fresa",
@@ -278,6 +337,27 @@ const PRODUCT_NAMES = [
   "Tiramisú",
   "Crepes con Nutella",
   "Fruta fresca",
+  "Tostada de Aguacate",
+  "Carpaccio de Res",
+  "Risotto de Setas",
+  "Croquetas de Jamón",
+  "Pulpo a la Gallega",
+  "Caldo de Mariscos",
+  "Bacalao a la Vizcaína",
+  "Tartaleta de Frutas",
+  "Cóctel de Camarones",
+  "Carpaccio de Salmón",
+  "Ensalada Caprese",
+  "Bruschetta",
+  "Gelato de Pistacho",
+  "Profiteroles",
+  "Café Espresso",
+  "Café Latte",
+  "Café Mocha",
+  "Café Cappuccino",
+  "Café Macchiato",
+  "Café Frappé",
+  "Café Affogato",
 ];
 const IMAGES = [
   "https://th.bing.com/th/id/R.0dd2e89abaafdedb2553d215359b4237?rik=6abZ%2bYNGczRriQ&riu=http%3a%2f%2fwww.trbimg.com%2fimg-5b8f2874%2fturbine%2fsd-et-dining-inside-out-20180801&ehk=8MSHG4Zn4vWV8BV0%2fUY7%2bhHvDgUHF3rrJ%2bGoaYvH8Qg%3d&risl=&pid=ImgRaw&r=0",
@@ -295,6 +375,49 @@ const IMAGES = [
   "https://i.pinimg.com/originals/b9/2e/f8/b92ef8b0fbdd368d67a9733081a99250.jpg",
   "https://www.hyattrestaurants.com/uploaded/restaurant_banners/restaurant_banner-1588619256.jpg",
   "http://static7.depositphotos.com/1021014/788/i/450/depositphotos_7888144-stock-photo-interior-of-restaurant.jpg",
+];
+const PRODUCT_CATEGORY_NAMES = [
+  "Entrantes",
+  "Sopas",
+  "Ensaladas",
+  "Carnes",
+  "Pescados",
+  "Mariscos",
+  "Vegetariano",
+  "Vegano",
+  "Sin gluten",
+  "Pasta",
+  "Pizza",
+  "Arroces",
+  "Postres",
+  "Bebidas",
+  "Vinos",
+  "Cervezas",
+  "Cócteles",
+  "Comida rápida",
+  "Comida fusión",
+  "Comida internacional",
+  "Comida local",
+  "Especialidades de la casa",
+  "Desayunos",
+  "Brunch",
+  "Meriendas",
+  "Cenas",
+  "Comida para llevar",
+  "Menú del día",
+  "Menú degustación",
+  "Menú infantil",
+  "Menú para grupos",
+  "Menú para eventos",
+  "Menú de temporada",
+  "Menú de navidad",
+  "Menú de año nuevo",
+  "Menú de san valentín",
+  "Menú de pascua",
+  "Menú de halloween",
+  "Menú de cumpleaños",
+  "Menú de aniversario",
+  "Menú de boda",
 ];
 
 export const randomToken = () => v4();
@@ -572,4 +695,54 @@ export const randomBestBranchProductStats = (
   result.sort((a, b) => b.sales - a.sales);
 
   return result;
+};
+
+export const randomProduct = (categoryId?: number): ProductInterface => {
+  const disabled = Math.random() > 0.9;
+
+  return {
+    id: Math.floor(Math.random() * 100000),
+    categoryId: categoryId || Math.floor(Math.random() * 100000),
+    name: PRODUCT_NAMES[Math.floor(Math.random() * PRODUCT_NAMES.length)],
+    price: +(Math.random() * 15 + 5).toFixed(2),
+    description: loremIpsum({ p: 1, random: true, avgSentencesPerParagraph: 2 })[0],
+    disabled,
+    highlight: disabled || Math.random() > 0.9,
+    deliveryDisabled: disabled || Math.random() > 0.9,
+  };
+};
+
+export const randomProductCategory = (
+  branchId?: number,
+  name?: string
+): ProductCategoryInterface => ({
+  id: Math.floor(Math.random() * 100000),
+  branchId: branchId || Math.floor(Math.random() * 100000),
+  name:
+    name ||
+    PRODUCT_CATEGORY_NAMES[Math.floor(Math.random() * PRODUCT_CATEGORY_NAMES.length)],
+});
+
+export const randomBranchProductCategories = (branchId?: number) => {
+  const id = branchId || Math.floor(Math.random() * 100000);
+
+  const categoryNames = randomSubArray(
+    PRODUCT_CATEGORY_NAMES,
+    Math.floor(Math.random() * 5 + 5)
+  );
+  return categoryNames.map((name) => randomProductCategory(id, name));
+};
+
+export const randomBranchProducts = (categories?: ProductCategoryInterface[]) => {
+  const nProducts = Math.floor(Math.random() * 50 + 20);
+  const products: ProductInterface[] = [];
+  for (let i = 0; i < nProducts; i++) {
+    const categoryId =
+      !!categories && categories.length
+        ? categories[Math.floor(Math.random() * categories.length)].id
+        : undefined;
+    products.push(randomProduct(categoryId));
+  }
+
+  return products;
 };

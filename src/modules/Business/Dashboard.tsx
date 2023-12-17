@@ -46,10 +46,14 @@ const Dashboard: FC = () => {
     );
   }, [branch?.id]);
 
+  useEffect(() => {
+    document.title = "Dashboard - Pa'ca";
+  }, []);
+
   return (
     <BusinessMainPage>
       {/* Header */}
-      <div className="flex flex-col w-full gap-2">
+      <div className="flex flex-col w-full gap-2 mb-4">
         <h1 className="text-[2rem] font-bold text-gray-800 leading-none">Dashboard</h1>
         <p className="text-2xl font-light leading-none">
           Estadisticas de la sucursal <br className="md:hidden" />
@@ -58,7 +62,7 @@ const Dashboard: FC = () => {
         <hr />
       </div>
 
-      <div className="flex flex-1 flex-col md:flex-row items-center mt-4 gap-16 md:gap-8">
+      <div className="flex flex-1 flex-col md:flex-row items-center gap-16 md:gap-8">
         <div className="flex flex-1 flex-col items-center h-full mt-8 md:mt-0">
           <h3 className="text-2xl font-bold text-gray-800 text-center">
             Porcentaje del local lleno

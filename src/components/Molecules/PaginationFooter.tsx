@@ -56,7 +56,7 @@ export const PaginationFooter: FC<PaginationFooterProps> = ({
   );
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white py-3 md:px-6">
+    <div className="flex items-center justify-between border-t border-gray-200 py-3 md:px-6">
       <div className="flex flex-1 md:gap-4 md:items-center justify-center md:justify-between">
         <div className="hidden md:block">
           <p className="text-sm text-gray-700">
@@ -220,10 +220,12 @@ export const PaginationFooter: FC<PaginationFooterProps> = ({
               new Array(Math.min(3, totalPages)).fill(0).map((_, index) => (
                 <PaginationButton
                   key={index}
-                  onClick={() => onPageChange(totalPages + index - 3)}
-                  current={index === 2}
+                  onClick={() =>
+                    onPageChange(totalPages + index - Math.min(3, totalPages))
+                  }
+                  current={index === Math.min(3, totalPages) - 1}
                 >
-                  {totalPages - 2 + index}
+                  {totalPages - Math.min(3, totalPages) + index + 1}
                 </PaginationButton>
               ))}
 

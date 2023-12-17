@@ -48,7 +48,7 @@ export const FormText: FC<FormTextProps> = ({
         containerClassName={labelcontainerClassName}
       />
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex w-full flex-col">
         <div className="relative flex flex-1 items-center">
           <input
             {...props}

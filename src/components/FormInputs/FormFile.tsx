@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import { FormikErrors } from "formik";
 import { inputClassName } from "./FormText";
@@ -36,6 +36,16 @@ export const FormFile: FC<FormFileProps> = ({
   const labelRef = useRef<HTMLLabelElement>(null);
 
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+
+  const fileImage = useMemo(() => {
+    if (!selected) return undefined;
+
+    if (selected.type.includes("image")) {
+      return URL.createObjectURL(selected);
+    }
+
+    return undefined;
+  }, [selected]);
 
   const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
@@ -100,22 +110,28 @@ export const FormFile: FC<FormFileProps> = ({
         onDragLeave={handleDragLeave}
         className={classNames(
           isDraggingOver ? "bg-gray-200" : "bg-gray-50",
-          "flex flex-col items-center justify-center w-full p-6 border-2 border-orange-500 border-dashed rounded-lg cursor-pointer hover:bg-gray-200",
+          "flex flex-col items-center justify-center overflow-hidden w-full border-2 border-orange-500 border-dashed rounded-lg cursor-pointer hover:bg-gray-200",
           labelContainerClassname
         )}
       >
-        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-          <CloudArrowUpIcon className="w-12 h-12 mb-4 text-orange-700" />
-          <p className="mb-2 text-sm text-gray-500 text-center">
-            <span className="font-semibold text-orange-700">{label}</span>
-            <br />
-            <span>
-              <span className="font-semibold">Haz click</span> para subir o arrastra y
-              suelta tu archivo aquí
-            </span>
-          </p>
-          <p className="text-xs text-gray-500 text-center">{description}</p>
-        </div>
+        {!fileImage && (
+          <div className="flex flex-col items-center justify-center p-6">
+            <CloudArrowUpIcon className="w-12 h-12 mb-4 text-orange-700" />
+            <p className="mb-2 text-sm text-gray-500 text-center">
+              <span className="font-semibold text-orange-700">{label}</span>
+              <br />
+              <span>
+                <span className="font-semibold">Haz click</span> para subir o arrastra y
+                suelta tu archivo aquí
+              </span>
+            </p>
+            <p className="text-xs text-gray-500 text-center">{description}</p>
+          </div>
+        )}
+
+        {!!fileImage && (
+          <img src={fileImage} alt={selected?.name} className="w-full h-full" />
+        )}
       </label>
 
       <div>

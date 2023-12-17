@@ -18,6 +18,7 @@ interface FormSearchProps<T> extends React.InputHTMLAttributes<HTMLInputElement>
   required?: boolean;
   selected: Option<T>;
   options: Option<T>[];
+  defaultOption?: string;
   labelClassName?: string;
   containerClassName?: string;
   error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
@@ -31,11 +32,11 @@ export const FormSearch = <T extends any>({
   selected,
   options,
   className,
+  defaultOption = "Seleccionar...",
   labelClassName,
   containerClassName,
   error,
   onSelectOption,
-  onBlur = () => {},
   ...props
 }: FormSearchProps<T>) => {
   const [open, setOpen] = useState(false);
@@ -46,14 +47,19 @@ export const FormSearch = <T extends any>({
     return options.filter(
       (option) =>
         !search ||
+        !option.name ||
         option.name.toLowerCase().includes(search.toLowerCase()) ||
         option.description?.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, options]);
 
   useEffect(() => {
-    setSearch(selected.name);
-  }, [selected]);
+    if (open) {
+      setSearch("");
+    } else {
+      setSearch(selected.name);
+    }
+  }, [open, selected]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -133,14 +139,25 @@ export const FormSearch = <T extends any>({
                   className="group relative cursor-pointer select-none py-2 pl-8 pr-4 text-gray-900 hover:bg-orange-700 hover:text-white"
                   value={option.value}
                 >
-                  <span
-                    className={classNames(
-                      selected.id === option.id ? "font-semibold" : "font-normal",
-                      "block truncate"
-                    )}
-                  >
-                    {option.name}
-                  </span>
+                  {!!option.name ? (
+                    <span
+                      className={classNames(
+                        selected.id === option.id ? "font-semibold" : "font-normal",
+                        "block truncate"
+                      )}
+                    >
+                      {option.name}
+                    </span>
+                  ) : (
+                    <span
+                      className={classNames(
+                        selected.id === option.id ? "font-semibold" : "font-normal",
+                        "block truncate italic opacity-50"
+                      )}
+                    >
+                      {defaultOption}
+                    </span>
+                  )}
                   <p className={classNames("block truncate text-xs ")}>
                     {option.description}
                   </p>

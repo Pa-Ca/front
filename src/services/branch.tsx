@@ -1,10 +1,17 @@
-import { randomImages, randomTable } from "@utils";
+import {
+  randomTable,
+  randomImages,
+  randomBranchProducts,
+  randomBranchProductCategories,
+} from "@utils";
 import {
   FetchResponse,
   TableInterace,
   BranchInterface,
+  ProductInterface,
   ExceptionResponse,
   DefaultTaxInterface,
+  ProductCategoryInterface,
 } from "@objects";
 
 const API_ENDPOINT = process.env.REACT_APP_API_HOST;
@@ -169,7 +176,7 @@ export const deleteDefaultTax = async (
   defaultTaxId: number,
   token: string
 ): Promise<FetchResponse<null>> => {
-  // FAKE GET - DELETE THIS IN PRODUCTION
+  // FAKE DELETE - DELETE THIS IN PRODUCTION
   console.log("[API] Delete Default Tax");
   return { data: null, isError: false };
   // -------------------------------------------
@@ -283,6 +290,75 @@ export const deleteBranchTable = async (
 
     if (response.status === 200) {
       return { isError: false };
+    } else {
+      const exception: ExceptionResponse = await response.json();
+      return { exception, isError: true };
+    }
+  } catch (e) {
+    return { error: e as Error, isError: true };
+  }
+};
+
+type ProductCategoryList = { productCategories: ProductCategoryInterface[] };
+export const getBranchProductCategories = async (
+  branchId: number,
+  token: string
+): Promise<FetchResponse<ProductCategoryList>> => {
+  // FAKE GET - DELETE THIS IN PRODUCTION
+  console.log("[API] Get Branch Product Categories");
+  const data = randomBranchProductCategories(branchId);
+  return { data: { productCategories: data }, isError: false };
+  // -------------------------------------------
+
+  const uri = `${API_ENDPOINT}/branch/${branchId}/product-sub-category`;
+
+  try {
+    const response = await fetch(uri, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const data: ProductCategoryList = await response.json();
+      return { data, isError: false };
+    } else {
+      const exception: ExceptionResponse = await response.json();
+      return { exception, isError: true };
+    }
+  } catch (e) {
+    return { error: e as Error, isError: true };
+  }
+};
+
+type ProductList = { products: ProductInterface[] };
+export const getBranchProducts = async (
+  branchId: number,
+  token: string,
+  categories?: ProductCategoryInterface[]
+): Promise<FetchResponse<ProductList>> => {
+  // FAKE GET - DELETE THIS IN PRODUCTION
+  console.log("[API] Get Branch Products");
+  const data = randomBranchProducts(categories);
+  return { data: { products: data }, isError: false };
+  // -------------------------------------------
+
+  const uri = `${API_ENDPOINT}/branch/${branchId}/product`;
+
+  try {
+    const response = await fetch(uri, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const data: ProductList = await response.json();
+      return { data, isError: false };
     } else {
       const exception: ExceptionResponse = await response.json();
       return { exception, isError: true };

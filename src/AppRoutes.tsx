@@ -2,12 +2,13 @@ import { UserRole } from "@objects";
 import Login from "./modules/Auth/Login";
 import Home from "./modules/Client/Home";
 import Signup from "./modules/Auth/Signup";
+import Profile from "./modules/Business/Profile";
+import Coupons from "./modules/Business/Coupons";
+import Products from "./modules/Business/Products";
+import Reserves from "./modules/Business/Reserves";
 import Dashboard from "./modules/Business/Dashboard";
 import PasswordRecovery from "./modules/Auth/PasswordRecovery";
 import TermsAndConditions from "./modules/Auth/TermsAndConditions";
-import Profile from "./modules/Business/Profile";
-import Products from "./modules/Business/Products";
-import Reserves from "./modules/Business/Reserves";
 
 interface AppRoute {
   /**
@@ -52,6 +53,12 @@ const AppRoutes: AppRoute[] = [
     path: "/business/products",
     role: UserRole.BUSINESS,
     element: <Products />,
+    auth: true,
+  },
+  {
+    path: "/business/coupons",
+    role: UserRole.BUSINESS,
+    element: <Coupons />,
     auth: true,
   },
   {
