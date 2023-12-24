@@ -21,6 +21,9 @@ import {
   BranchProductStatsInterface,
   BranchReservesStatsInterface,
   ProductCategoryInterface,
+  CouponInterface,
+  CouponType,
+  CouponDiscountType,
 } from "@objects";
 
 const PHONES = ["0424", "0414", "0412", "0416"];
@@ -419,6 +422,50 @@ const PRODUCT_CATEGORY_NAMES = [
   "Menú de aniversario",
   "Menú de boda",
 ];
+const COUPON_NAMES = [
+  "2x1 en Perros Calientes",
+  "Descuento Navideño",
+  "Promoción de Verano",
+  "Oferta de Almuerzo",
+  "Cena para Dos",
+  "Postre Gratis",
+  "Bebida en la Casa",
+  "Buffet a Mitad de Precio",
+  "Descuento de Cumpleaños",
+  "Noche de Tapas",
+  "Menú del Día con Descuento",
+  "Oferta de Fin de Semana",
+  "Promoción de Desayuno",
+  "Combo Familiar",
+  "Noche de Pizza",
+  "Promoción de Sushi",
+  "Descuento para Estudiantes",
+  "Oferta de Lunes Loco",
+  "Promoción de Martes de Tacos",
+  "Miércoles de Alitas",
+  "Jueves de Hamburguesas",
+  "Viernes de Mariscos",
+  "Sábado de Paella",
+  "Domingo de Asado",
+  "Promoción de Ensaladas",
+  "Descuento de Madrugadores",
+  "Oferta de Cierre",
+  "Promoción de Carnes",
+  "Descuento de Mariscos",
+  "Oferta de Pastas",
+  "Promoción de Vinos",
+  "Descuento de Cervezas Artesanales",
+  "Oferta de Cocteles",
+  "Promoción de Comida Vegetariana",
+  "Descuento de Comida Vegana",
+  "Oferta de Comida Sin Gluten",
+  "Promoción de Comida Saludable",
+  "Descuento de Comida Orgánica",
+  "Oferta de Comida Local",
+  "Promoción de Comida Internacional",
+  "Descuento de Comida Gourmet",
+  "Oferta de Comida Rápida",
+];
 
 export const randomToken = () => v4();
 
@@ -474,7 +521,7 @@ export const randomDuration = (): Duration => {
 export const randomTimestamp = (min?: Date) => {
   return new Date(
     Math.floor(Math.random() * (Date.now() - (min?.getTime() ?? 0))) +
-    (min?.getTime() ?? 0)
+      (min?.getTime() ?? 0)
   );
 };
 
@@ -745,4 +792,39 @@ export const randomBranchProducts = (categories?: ProductCategoryInterface[]) =>
   }
 
   return products;
+};
+
+export const randomCoupon = (): CouponInterface => {
+  const type = Math.random() > 0.3 ? CouponType.PRODUCT : CouponType.CATEGORY;
+  const discountType =
+    Math.random() > 0.3 ? CouponDiscountType.PERCENTAGE : CouponDiscountType.AMOUNT;
+  const pastYear = new Date();
+  pastYear.setDate(pastYear.getDate() - 365);
+  const startDate = randomTimestamp(pastYear);
+  const endDate = randomTimestamp(startDate);
+
+  return {
+    id: Math.floor(Math.random() * 100000),
+    type,
+    discountType,
+    name: COUPON_NAMES[Math.floor(Math.random() * COUPON_NAMES.length)],
+    value:
+      discountType === CouponDiscountType.PERCENTAGE
+        ? Math.random() * 50
+        : Math.random() * 30,
+    description: loremIpsum({ p: 1, random: true, avgSentencesPerParagraph: 2 })[0],
+    startDate: startDate.toISOString(),
+    endDate: endDate.toISOString(),
+    enabled: Math.random() > 0.2,
+    products:
+      type === CouponType.PRODUCT
+        ? new Array(Math.floor(Math.random() * 10 + 1)).fill(0).map(() => randomProduct())
+        : [],
+    categories:
+      type === CouponType.CATEGORY
+        ? new Array(Math.floor(Math.random() * 10 + 1))
+            .fill(0)
+            .map(() => randomProductCategory())
+        : [],
+  };
 };

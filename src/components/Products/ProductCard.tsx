@@ -23,10 +23,10 @@ interface ProductCardProps {
   categories: ProductCategoryInterface[];
   onDelete?: () => Promise<boolean>;
   onEdit?: (
-    prop: ProductFormValues,
+    values: ProductFormValues,
     formik: FormikHelpers<ProductFormValues>
   ) => Promise<boolean>;
-  onInlineEdit?: (prop: ProductInterface) => void;
+  onInlineEdit?: (product: ProductInterface) => void;
 }
 export const ProductCard: FC<ProductCardProps> = ({
   product,
@@ -94,7 +94,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                 {product.highlight && <StarIcon className="h-6 w-6 text-orange-700" />}
 
                 {!product.highlight && (
-                  <OutlineStarIcon className="h-6 w-6 text-orange-500" />
+                  <OutlineStarIcon className="h-6 w-6 text-orange-700" />
                 )}
               </IconButton>
 
@@ -109,7 +109,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                 }}
                 className="!absolute p-2 top-2 right-2 bg-white bg-opacity-50 hover:bg-white hover:bg-opacity-75"
               >
-                <PencilIcon className="h-6 w-6 text-orange-900" />
+                <PencilIcon className="h-6 w-6 text-orange-700" />
               </IconButton>
             </div>
 
@@ -163,11 +163,11 @@ export const ProductCard: FC<ProductCardProps> = ({
             </div>
           </div>
 
-          <div className="relative flex flex-col p-6 overflow-hidden rounded-lg w-full md:w-[20rem] h-[20rem] shadow-lg group-hover:shadow-2xl">
+          <div className="relative flex flex-col p-6 overflow-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full rounded-lg w-full md:w-[20rem] h-[20rem] shadow-lg group-hover:shadow-2xl">
             <div className="flex justify-between gap-4">
               <p className="text-2xl font-bold text-gray-800">{product.name}</p>
 
-              <p className="text-2xl text-orange-700 font-medium">
+              <p className="text-2xl text-orange-700 font-bold">
                 ${product.price.toFixed(2)}
               </p>
             </div>

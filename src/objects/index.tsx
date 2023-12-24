@@ -5,5 +5,6 @@ export * from "./GuestInterface";
 export * from "./ClientInterface";
 export * from "./BranchInterface";
 export * from "./StatsInterfaces";
+export * from "./CouponInterface";
 export * from "./ProductInterface";
 export * from "./BusinessInterface";

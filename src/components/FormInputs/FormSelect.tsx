@@ -17,6 +17,7 @@ interface FormSelectProps<T> {
   required?: boolean;
   selected: Option<T>;
   options: Option<T>[];
+  defaultOption?: string;
   labelClassName?: string;
   inputClassName?: string;
   containerClassName?: string;
@@ -30,6 +31,7 @@ export function FormSelect<T>({
   required,
   selected,
   options,
+  defaultOption,
   labelClassName,
   inputClassName,
   containerClassName,
@@ -59,7 +61,13 @@ export function FormSelect<T>({
                 inputClassName
               )}
             >
-              <span className="block truncate">{selected.name}</span>
+              <span className="block truncate">
+                {selected.name ? (
+                  selected.name
+                ) : (
+                  <span className="italic italic opacity-50">{defaultOption}</span>
+                )}
+              </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </span>
@@ -99,7 +107,13 @@ export function FormSelect<T>({
                             "block truncate"
                           )}
                         >
-                          {option.name}
+                          {option.name ? (
+                            option.name
+                          ) : (
+                            <span className="italic italic opacity-50">
+                              {defaultOption}
+                            </span>
+                          )}
                         </span>
                         <p className={classNames("block truncate text-xs ")}>
                           {option.description}

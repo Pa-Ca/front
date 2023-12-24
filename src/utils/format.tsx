@@ -1,4 +1,4 @@
-import { Duration, LocalTime, Tier } from "@objects";
+import { CouponDiscountType, CouponType, Duration, LocalTime, Tier } from "@objects";
 
 export const formatTier = (tier?: Tier) => {
   switch (tier) {
@@ -40,9 +40,32 @@ export const formatDuration = (duration: Duration) => {
     .map(Number);
 
   if (minute) {
-    return `${hour} hora${hour !== 1 ? "s" : ""} y ${minute} minuto${minute !== 1 ? "s" : ""
-      }`;
+    return `${hour} hora${hour !== 1 ? "s" : ""} y ${minute} minuto${
+      minute !== 1 ? "s" : ""
+    }`;
   } else {
     return `${hour} hora${hour !== 1 ? "s" : ""}`;
+  }
+};
+
+export const formatCouponType = (type: CouponType) => {
+  switch (type) {
+    case CouponType.PRODUCT:
+      return "Producto";
+    case CouponType.CATEGORY:
+      return "Categoría";
+    default:
+      return "Desconocido";
+  }
+};
+
+export const formatCouponDiscountType = (type: CouponDiscountType) => {
+  switch (type) {
+    case CouponDiscountType.PERCENTAGE:
+      return "Porcentaje";
+    case CouponDiscountType.AMOUNT:
+      return "Monto";
+    default:
+      return "Desconocido";
   }
 };

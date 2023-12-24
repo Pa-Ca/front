@@ -3,12 +3,12 @@ import * as Yup from "yup";
 import { handleNumberChange } from "@utils";
 import { Switch } from "../FormInputs/Switch";
 import { FormText } from "../FormInputs/FormText";
+import { FormFile } from "../FormInputs/FormFile";
 import { ProductCategoryInterface } from "@objects";
 import { FormSearch } from "../FormInputs/FormSearch";
 import { FormTextArea } from "../FormInputs/FormTextArea";
 import { Formik, FormikHelpers, FormikProps } from "formik";
 import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
-import { FormFile } from "../FormInputs/FormFile";
 
 export interface ProductFormValues {
   name: string;
@@ -164,8 +164,8 @@ interface ProductFormProps {
 export const ProductForm: FC<ProductFormProps> = ({
   initialValues,
   categories,
-  onCancel = () => { },
-  onSubmit = () => { },
+  onCancel = () => {},
+  onSubmit = () => {},
 }) => {
   // Validations with Yup for Formik form
   const validationSchema = Yup.object().shape({

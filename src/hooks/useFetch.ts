@@ -1,10 +1,10 @@
+import { useCallback } from "react";
 import { logout, refresh } from "@services";
 import { FetchResponse, UserRole } from "@objects";
 import { unsetBranches } from "src/store/slices/branches";
 import { unsetBusiness } from "src/store/slices/business";
 import { authLogout, setToken } from "src/store/slices/auth";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { useCallback } from "react";
 
 export const useFetch = () => {
   const dispatch = useAppDispatch();

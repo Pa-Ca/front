@@ -19,20 +19,20 @@ import {
   getBranchProducts,
   createProductCategory,
   updateProductCategory,
-  getBranchProductCategories,
   deleteProductCategory,
+  getBranchProductCategories,
 } from "@services";
 import {
   Modal,
   Switch,
   FormText,
   FormSearch,
+  FormSelect,
   ProductForm,
   PrimaryButton,
   SecondaryButton,
   BusinessMainPage,
   ProductFormValues,
-  FormSelect,
 } from "@components";
 
 const PRODUCTS_PER_PAGE = 24;
@@ -488,7 +488,7 @@ const Products: FC = () => {
               <img
                 src={defaultImage}
                 alt="Products not found"
-                className="w-[13rem] h-[13rem] sm:w-[20rem] sm:h-[20rem] object-cover opacity-[0.6]"
+                className="w-[13rem] h-[13rem] sm:w-[20rem] sm:h-[20rem] opacity-[0.6]"
               />
               <p className="text-xl text-center font-light text-gray-800">
                 Parece que no hay productos que coincidan con tu búsqueda. Intenta creando
