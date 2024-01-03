@@ -5,8 +5,8 @@ import Signup from "./modules/Auth/Signup";
 import Profile from "./modules/Business/Profile";
 import Coupons from "./modules/Business/Coupons";
 import Products from "./modules/Business/Products";
-import Reserves from "./modules/Business/Reserves";
 import Dashboard from "./modules/Business/Dashboard";
+import Reservations from "./modules/Business/Reservations";
 import PasswordRecovery from "./modules/Auth/PasswordRecovery";
 import TermsAndConditions from "./modules/Auth/TermsAndConditions";
 
@@ -62,9 +62,9 @@ const AppRoutes: AppRoute[] = [
     auth: true,
   },
   {
-    path: "/business/reserves",
+    path: "/business/reservations",
     role: UserRole.BUSINESS,
-    element: <Reserves />,
+    element: <Reservations />,
     auth: true,
   },
   {

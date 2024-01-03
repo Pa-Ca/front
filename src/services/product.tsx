@@ -1,3 +1,4 @@
+import { randomBranchProductCategories, randomBranchProducts } from "@utils";
 import {
   FetchResponse,
   ProductInterface,
@@ -218,4 +219,73 @@ export const getProductImage = async (
   // -------------------------------------------
 
   console.log(productId);
+};
+
+type ProductCategoryList = { productCategories: ProductCategoryInterface[] };
+export const getBranchProductCategories = async (
+  branchId: number,
+  token: string
+): Promise<FetchResponse<ProductCategoryList>> => {
+  // FAKE GET - DELETE THIS IN PRODUCTION
+  console.log("[API] Get Branch Product Categories");
+  const data = randomBranchProductCategories(branchId);
+  return { data: { productCategories: data }, isError: false };
+  // -------------------------------------------
+
+  const uri = `${API_ENDPOINT}/branch/${branchId}/product-sub-category`;
+
+  try {
+    const response = await fetch(uri, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const data: ProductCategoryList = await response.json();
+      return { data, isError: false };
+    } else {
+      const exception: ExceptionResponse = await response.json();
+      return { exception, isError: true };
+    }
+  } catch (e) {
+    return { error: e as Error, isError: true };
+  }
+};
+
+type ProductList = { products: ProductInterface[] };
+export const getBranchProducts = async (
+  branchId: number,
+  token: string,
+  categories?: ProductCategoryInterface[]
+): Promise<FetchResponse<ProductList>> => {
+  // FAKE GET - DELETE THIS IN PRODUCTION
+  console.log("[API] Get Branch Products");
+  const data = randomBranchProducts(categories);
+  return { data: { products: data }, isError: false };
+  // -------------------------------------------
+
+  const uri = `${API_ENDPOINT}/branch/${branchId}/product`;
+
+  try {
+    const response = await fetch(uri, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const data: ProductList = await response.json();
+      return { data, isError: false };
+    } else {
+      const exception: ExceptionResponse = await response.json();
+      return { exception, isError: true };
+    }
+  } catch (e) {
+    return { error: e as Error, isError: true };
+  }
 };

@@ -27,7 +27,8 @@ export const BranchImages: FC<BranchImagesProps> = ({ images, setImages }) => {
         if (response.isError || !response.data) {
           alertService.error(
             "No se pudo agregar la imagen",
-            response.error?.message ?? response.exception?.message
+            response.error?.message ?? response.exception?.message,
+            { autoClose: false }
           );
           return;
         }
@@ -47,7 +48,8 @@ export const BranchImages: FC<BranchImagesProps> = ({ images, setImages }) => {
         if (response.isError || !response.data) {
           alertService.error(
             "No se pudo eliminar la imagen",
-            response.error?.message ?? response.exception?.message
+            response.error?.message ?? response.exception?.message,
+            { autoClose: false }
           );
           return;
         }

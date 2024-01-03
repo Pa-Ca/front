@@ -52,6 +52,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
             <FormText
               id="email"
               name="email"
+              type="email"
               autoComplete="email"
               label="Correo"
               value={formik.values.email}
@@ -131,7 +132,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
         />
 
         <div>
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center">
             <FormCheckbox
               id="terms"
               name="terms"

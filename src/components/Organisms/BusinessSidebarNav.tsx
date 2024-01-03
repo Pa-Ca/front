@@ -13,13 +13,11 @@ import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import {
   Card,
   List,
-  Chip,
   ListItem,
   Accordion,
   Typography,
   AccordionBody,
   ListItemPrefix,
-  ListItemSuffix,
   AccordionHeader,
 } from "@material-tailwind/react";
 import {
@@ -146,24 +144,14 @@ export const BusinessSidebarNav: FC = () => {
 
         <ListItem
           className="min-h-[3rem] px-1 sm:px-3"
-          onClick={() => navigate("/business/reserves")}
-          selected={location.pathname === "/business/reserves"}
+          onClick={() => navigate("/business/reservations")}
+          selected={location.pathname === "/business/reservations"}
         >
           <ListItemPrefix>
             <ClipboardDocumentCheckIcon className="h-5 w-5" />
           </ListItemPrefix>
 
           <p className="transition-all opacity-0 group-hover:opacity-100">Reservas</p>
-
-          <ListItemSuffix>
-            <Chip
-              value="14"
-              size="sm"
-              variant="ghost"
-              color="blue-gray"
-              className="rounded-full transition-all opacity-0 group-hover:opacity-100"
-            />
-          </ListItemSuffix>
         </ListItem>
 
         <ListItem

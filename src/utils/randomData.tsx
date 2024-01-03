@@ -1,4 +1,5 @@
 import { v4 } from "uuid";
+import { $enum } from "ts-enum-util";
 import { BRANCH_TYPES } from "./branchTypes";
 import { BRANCH_LOCATIONS } from "./branchLocations";
 import { loremIpsum, name, surname, fullname } from "react-lorem-ipsum";
@@ -7,23 +8,28 @@ import {
   Duration,
   UserRole,
   LocalTime,
+  CouponType,
   TaxInterface,
   TableInterace,
   SaleInterface,
   GuestInterface,
   ClientInterface,
   BranchInterface,
+  CouponInterface,
   ProductInterface,
+  InvoiceInterface,
   BusinessInterface,
+  ReservationStatus,
+  CouponDiscountType,
   DefaultTaxInterface,
   SaleProductInterface,
+  ReservationInterface,
   BranchSaleStatsInterface,
-  BranchProductStatsInterface,
-  BranchReservesStatsInterface,
   ProductCategoryInterface,
-  CouponInterface,
-  CouponType,
-  CouponDiscountType,
+  ReservationInfoInterface,
+  BranchProductStatsInterface,
+  BranchReservationsStatsInterface,
+  SaleStatus,
 } from "@objects";
 
 const PHONES = ["0424", "0414", "0412", "0416"];
@@ -466,6 +472,19 @@ const COUPON_NAMES = [
   "Descuento de Comida Gourmet",
   "Oferta de Comida Rápida",
 ];
+const PAYMENT_NAMES = [
+  "Tarjeta de Crédito",
+  "Tarjeta de Débito",
+  "Transferencia Bancaria",
+  "Pago Móvil",
+  "Zelle",
+  "Paypal",
+  "Bitcoin",
+  "Efectivo",
+  "Cheque",
+  "Gift Card",
+  "Criptomonedas",
+];
 
 export const randomToken = () => v4();
 
@@ -474,6 +493,8 @@ export function randomSubArray<T>(array: T[], n: number) {
   const result = [];
 
   for (let i = 0; i < n; i++) {
+    if (copy.length === 0) break;
+
     const randomIndex = Math.floor(Math.random() * copy.length);
     const element = copy[randomIndex];
     result.push(element);
@@ -485,7 +506,7 @@ export function randomSubArray<T>(array: T[], n: number) {
 }
 
 export const randomPhoneNumber = () => {
-  return `${PHONES[Math.floor(Math.random() * PHONES.length)]}${Math.floor(
+  return `${PHONES[Math.floor(Math.random() * PHONES.length)]}-${Math.floor(
     Math.random() * 90000000 + 1000000
   )}`;
 };
@@ -518,19 +539,26 @@ export const randomDuration = (): Duration => {
   return `PT${hour}H${minute}M${second}S` as Duration;
 };
 
-export const randomTimestamp = (min?: Date) => {
+export const randomTimestamp = (min?: Date, max?: Date) => {
+  const maxDate = max?.getTime() ?? Date.now();
+
   return new Date(
-    Math.floor(Math.random() * (Date.now() - (min?.getTime() ?? 0))) +
+    Math.floor(Math.random() * (maxDate - (min?.getTime() ?? 0) + 24 * 60 * 60 * 1000)) +
       (min?.getTime() ?? 0)
   );
 };
 
 export const randomClient = (userId?: number): ClientInterface => {
+  const clientName = name();
+  const clientSurname = surname();
   return {
     id: Math.floor(Math.random() * 100000),
     userId: userId || Math.floor(Math.random() * 100000),
-    name: name(),
-    surname: surname(),
+    clientGuestId: Math.floor(Math.random() * 100000),
+    name: clientName,
+    surname: clientSurname,
+    email: `${clientName.toLowerCase()}.${clientSurname.toLowerCase()}@gmail.com`,
+    identityDocument: "V-" + Math.floor(Math.random() * 90000000 + 10000000).toString(),
     stripeCustomerId: v4(),
     phoneNumber: randomPhoneNumber(),
     dateOfBirth: `${Math.floor(Math.random() * 30 + 1)}/${Math.floor(
@@ -622,14 +650,19 @@ export const randomTable = (branchId?: number): TableInterace => ({
   branchId: branchId || Math.floor(Math.random() * 100000),
 });
 
-export const randomGuest = (): GuestInterface => ({
-  id: Math.floor(Math.random() * 100000),
-  name: name(),
-  surname: surname(),
-  phoneNumber: randomPhoneNumber(),
-  email: `${name()}.${surname()}@gmail.com`,
-  identityDocument: "V-" + Math.floor(Math.random() * 90000000 + 10000000).toString(),
-});
+export const randomGuest = (): GuestInterface => {
+  const guestName = name();
+  const guestSurname = surname();
+
+  return {
+    id: Math.floor(Math.random() * 100000),
+    name: guestName,
+    surname: guestSurname,
+    phoneNumber: randomPhoneNumber(),
+    email: `${guestName.toLowerCase()}.${guestSurname.toLowerCase()}@gmail.com`,
+    identityDocument: "V-" + Math.floor(Math.random() * 90000000 + 10000000).toString(),
+  };
+};
 
 export const randomSaleProduct = (
   saleId?: number,
@@ -640,19 +673,31 @@ export const randomSaleProduct = (
   productId: productId || Math.floor(Math.random() * 100000),
   name: PRODUCT_NAMES[Math.floor(Math.random() * PRODUCT_NAMES.length)],
   amount: Math.floor(Math.random() * 10 + 1),
-  price: Math.floor(Math.random() * 100 + 1),
+  price: Math.random() * 30 + 1,
 });
 
 export const randomSale = (
   branchId?: number,
-  tables?: TableInterace[]
+  tables?: TableInterace[],
+  status?: SaleStatus[],
+  startTime?: Date,
+  endTime?: Date
 ): SaleInterface => {
   const isClient = Math.random() > 0.5;
   const client = isClient ? randomClient() : undefined;
   const guest = isClient ? undefined : randomGuest();
-  const startTime = randomTimestamp();
-  const endTime = randomTimestamp(startTime);
   const insite = Math.random() > 0.2;
+
+  const minDate =
+    startTime ??
+    (endTime ? new Date(endTime.getTime() - 10 * 24 * 60 * 60 * 1000) : new Date());
+  const maxDate = endTime ?? new Date(minDate.getTime() + 10 * 24 * 60 * 60 * 1000);
+  const requestDate = randomTimestamp(minDate, maxDate);
+  const saleStartTime = randomTimestamp(requestDate, maxDate);
+  const saleEndTime = new Date(
+    saleStartTime.getTime() + Math.floor((Math.random() * 2 + 0.5) * 60 * 60 * 1000)
+  );
+  const statusList = status && status.length > 0 ? status : $enum(SaleStatus).getValues();
 
   let saleTables: TableInterace[] = [];
   if (!!tables && tables.length > 0) {
@@ -673,9 +718,9 @@ export const randomSale = (
       clientGuestId: Math.floor(Math.random() * 100000),
       invoiceId: Math.floor(Math.random() * 100000),
       clientQuantity: Math.floor(Math.random() * 10 + 1),
-      status: Math.floor(Math.random() * 5),
-      startTime: startTime.toISOString(),
-      endTime: endTime.toISOString(),
+      status: statusList[Math.floor(Math.random() * statusList.length)],
+      startTime: saleStartTime.toISOString(),
+      endTime: saleEndTime.toISOString(),
       dollarExchange: Math.floor(Math.random() * 10 + 30),
       note: loremIpsum({ p: 1, random: true })[0],
     },
@@ -695,7 +740,7 @@ export const randomImages = (n: number = 5) => {
   return randomSubArray(IMAGES, n);
 };
 
-export const randomBranchReservesStats = (): BranchReservesStatsInterface => ({
+export const randomBranchReservationsStats = (): BranchReservationsStatsInterface => ({
   pending: Math.floor(Math.random() * 50),
   approved: Math.floor(Math.random() * 30),
   active: Math.floor(Math.random() * 15),
@@ -826,5 +871,88 @@ export const randomCoupon = (): CouponInterface => {
             .fill(0)
             .map(() => randomProductCategory())
         : [],
+  };
+};
+
+export const randomInvoice = (price?: number): InvoiceInterface => ({
+  id: Math.floor(Math.random() * 100000),
+  price: price || Math.floor(Math.random() * 100 + 1),
+  payDate: randomTimestamp().toISOString(),
+  payment: PAYMENT_NAMES[Math.floor(Math.random() * PAYMENT_NAMES.length)],
+  paymentCode: v4().slice(0, 8),
+});
+
+export const randomReservation = (
+  branchId?: number,
+  guestId?: number,
+  invoiceId?: number | null,
+  byClient?: boolean,
+  status?: ReservationStatus[],
+  startTime?: Date,
+  endTime?: Date
+): ReservationInterface => {
+  const minDate =
+    startTime ??
+    (endTime ? new Date(endTime.getTime() - 10 * 24 * 60 * 60 * 1000) : new Date());
+  const maxDate = endTime ?? new Date(minDate.getTime() + 10 * 24 * 60 * 60 * 1000);
+
+  const isClient = byClient ?? Math.random() > 0.5;
+  const requestDate = randomTimestamp(minDate, maxDate);
+  const reservationDateIn = randomTimestamp(requestDate, maxDate);
+  const reservationDateOut = new Date(
+    reservationDateIn.getTime() + Math.floor((Math.random() * 2 + 0.5) * 60 * 60 * 1000)
+  );
+  const statusList =
+    status && status.length > 0 ? status : $enum(ReservationStatus).getValues();
+  const invoiceID =
+    invoiceId === null ? undefined : invoiceId || Math.floor(Math.random() * 100000);
+
+  return {
+    id: Math.floor(Math.random() * 100000),
+    branchId: branchId || Math.floor(Math.random() * 100000),
+    guestId: isClient ? undefined : guestId || Math.floor(Math.random() * 100000),
+    invoiceId: invoiceID,
+    requestDate: requestDate.toISOString(),
+    reservationDateIn: reservationDateIn.toISOString(),
+    reservationDateOut: reservationDateOut.toISOString(),
+    price: Math.random() * 100 + 1,
+    status: statusList[Math.floor(Math.random() * statusList.length)],
+    tableNumber: Math.floor(Math.random() * 5 + 1),
+    clientNumber: Math.floor(Math.random() * 10 + 1),
+    occasion: loremIpsum({ p: 1, random: true })[0],
+    byClient: isClient,
+  };
+};
+
+export const randomReservationInfo = (
+  branchId?: number,
+  byClient?: boolean,
+  status?: ReservationStatus[],
+  startTime?: Date,
+  endTime?: Date
+): ReservationInfoInterface => {
+  const branchID = branchId || Math.floor(Math.random() * 100000);
+  const isClient = byClient ?? Math.random() > 0.5;
+  const client = isClient ? randomClient() : undefined;
+  const guest = isClient ? undefined : randomGuest();
+  const reservation = randomReservation(
+    branchID,
+    guest?.id,
+    undefined,
+    isClient,
+    status,
+    startTime,
+    endTime
+  );
+  const invoice = Math.random() > 0.5 ? randomInvoice(reservation.price) : undefined;
+  if (invoice) {
+    reservation.invoiceId = invoice.id;
+  }
+
+  return {
+    reservation,
+    invoice,
+    client,
+    guest,
   };
 };

@@ -201,7 +201,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                 e.stopPropagation();
                 setOpenDeleteModal(true);
               }}
-              className="!absolute p-2 bottom-2 right-2 bg-red-50 bg-opacity-50 hover:bg-red-100 hover:bg-opacity-75"
+              className="!fixed p-2 bottom-2 right-2 bg-red-50 bg-opacity-50 hover:bg-red-100 hover:bg-opacity-75"
             >
               <TrashIcon className="h-6 w-6 text-orange-900" />
             </IconButton>

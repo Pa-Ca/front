@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useFetch } from "@hooks";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "src/store/hooks";
-import { getBranchReservesStats } from "@services";
+import { getBranchReservationsStats } from "@services";
 import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
 import {
   LinkText,
@@ -25,7 +25,7 @@ const Dashboard: FC = () => {
 
   const [period, setPeriod] = useState(PERIODS[0]);
   const [barColor, setBarColor] = useState("#ED8936");
-  const [branchReservesStats, setBranchReservesStats] = useState({
+  const [branchReservationsStats, setBranchReservationsStats] = useState({
     active: 0,
     pending: 0,
     approved: 0,
@@ -35,13 +35,13 @@ const Dashboard: FC = () => {
   useEffect(() => {
     if (!branch?.id) return;
 
-    fetch((token: string) => getBranchReservesStats(branch?.id, token)).then(
+    fetch((token: string) => getBranchReservationsStats(branch?.id, token)).then(
       (response) => {
         if (response.isError || !response.data) {
           return;
         }
 
-        setBranchReservesStats(response.data);
+        setBranchReservationsStats(response.data);
       }
     );
   }, [branch?.id, fetch]);
@@ -77,7 +77,7 @@ const Dashboard: FC = () => {
                   outerRadius="80%"
                   data={[
                     {
-                      value: branchReservesStats.percentageFull,
+                      value: branchReservationsStats.percentageFull,
                       fill: barColor,
                     },
                     {
@@ -97,12 +97,12 @@ const Dashboard: FC = () => {
 
               <div className="absolute top-1/2 right-1/2 transform translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center">
                 <p className="text-5xl sm:text-6xl font-bold text-gray-800 -mt-4">
-                  {branchReservesStats.percentageFull.toFixed(0)}%
+                  {branchReservationsStats.percentageFull.toFixed(0)}%
                 </p>
                 <LinkText
                   className="text-lg"
                   text="Ver reservas"
-                  onClick={() => navigate("/business/reserves")}
+                  onClick={() => navigate("/business/reservations")}
                 />
               </div>
             </div>
@@ -115,7 +115,7 @@ const Dashboard: FC = () => {
                   Pendientes
                 </p>
                 <p className="text-3xl sm:text-5xl md:text-3xl lg:text-5xl font-medium text-gray-800">
-                  {branchReservesStats.pending}
+                  {branchReservationsStats.pending}
                 </p>
               </div>
 
@@ -126,7 +126,7 @@ const Dashboard: FC = () => {
                   Aprobadas
                 </p>
                 <p className="text-3xl sm:text-5xl md:text-3xl lg:text-5xl font-medium text-gray-800">
-                  {branchReservesStats.approved}
+                  {branchReservationsStats.approved}
                 </p>
               </div>
 
@@ -137,7 +137,7 @@ const Dashboard: FC = () => {
                   Activas
                 </p>
                 <p className="text-3xl sm:text-5xl md:text-3xl lg:text-5xl font-medium text-gray-800">
-                  {branchReservesStats.active}
+                  {branchReservationsStats.active}
                 </p>
               </div>
             </div>

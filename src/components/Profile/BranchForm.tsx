@@ -1,20 +1,20 @@
 import { FC } from "react";
 import * as Yup from "yup";
+import { Switch } from "../FormInputs/Switch";
 import { Duration, LocalTime } from "@objects";
 import { FormText } from "../FormInputs/FormText";
-import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
-import { Formik, FormikHelpers, FormikProps } from "formik";
-import {
-  BRANCH_LOCATIONS,
-  BRANCH_TYPES,
-  handleNaturalNumberChange,
-  handleNumberChange,
-} from "@utils";
 import { FormSearch } from "../FormInputs/FormSearch";
 import { FormDuration } from "../FormInputs/FormDuration";
-import { FormLocalTime } from "../FormInputs/FormLocalTime";
 import { FormTextArea } from "../FormInputs/FormTextArea";
-import { Switch } from "../FormInputs/Switch";
+import { FormLocalTime } from "../FormInputs/FormLocalTime";
+import { Formik, FormikHelpers, FormikProps } from "formik";
+import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
+import {
+  BRANCH_TYPES,
+  BRANCH_LOCATIONS,
+  handleNumberChange,
+  handleIntegerChange,
+} from "@utils";
 
 export interface BranchFormValues {
   name: string;
@@ -37,14 +37,18 @@ interface FormInterface {
 }
 const Form: FC<FormInterface> = ({ formik, onCancel }) => {
   return (
-    <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">
+    <form
+      onSubmit={formik.handleSubmit}
+      className="flex flex-col gap-2"
+      autoComplete="off"
+    >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
           <FormText
             required
             id="name"
             name="name"
-            autoComplete="off"
+            autoComplete="nope"
             label="Nombre"
             value={formik.values.name}
             error={
@@ -83,7 +87,7 @@ const Form: FC<FormInterface> = ({ formik, onCancel }) => {
             required
             id="phoneNumber"
             name="phoneNumber"
-            autoComplete="off"
+            autoComplete="nope"
             label="Celular"
             value={formik.values.phoneNumber}
             error={
@@ -135,7 +139,7 @@ const Form: FC<FormInterface> = ({ formik, onCancel }) => {
                 : undefined
             }
             onBlur={formik.handleBlur}
-            onChange={(e) => handleNaturalNumberChange(e, formik.handleChange)}
+            onChange={(e) => handleIntegerChange(e, formik.handleChange, 0)}
             containerClassName="flex-1"
           />
 
@@ -169,7 +173,7 @@ const Form: FC<FormInterface> = ({ formik, onCancel }) => {
                 : undefined
             }
             onBlur={formik.handleBlur}
-            onChange={(e) => handleNumberChange(e, formik.handleChange)}
+            onChange={(e) => handleNumberChange(e, formik.handleChange, 0)}
             containerClassName="flex-1"
           />
 
@@ -217,7 +221,7 @@ const Form: FC<FormInterface> = ({ formik, onCancel }) => {
           className="h-32 resize-none"
         />
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 w-full">
           <FormText
             id="mapsLink"
             name="mapsLink"

@@ -3,14 +3,8 @@ import { useFetch } from "@hooks";
 import { FormikHelpers } from "formik";
 import { useAppSelector } from "src/store/hooks";
 import { InboxIcon, TagIcon } from "@heroicons/react/24/outline";
-import { ProductCard } from "src/components/Products/ProductCard";
 import { ProductCategoryInterface, ProductInterface } from "@objects";
-import { PaginationFooter } from "src/components/Molecules/PaginationFooter";
 import defaultImage from "../../assets/images/default-product-image-without-bg.png";
-import {
-  ProductCategoryForm,
-  ProductCategoryFormValues,
-} from "src/components/Products/ProductCategoryForm";
 import {
   alertService,
   createProduct,
@@ -28,11 +22,15 @@ import {
   FormText,
   FormSearch,
   FormSelect,
+  ProductCard,
   ProductForm,
   PrimaryButton,
   SecondaryButton,
+  PaginationFooter,
   BusinessMainPage,
   ProductFormValues,
+  ProductCategoryForm,
+  ProductCategoryFormValues,
 } from "@components";
 
 const PRODUCTS_PER_PAGE = 24;
@@ -214,7 +212,8 @@ const Products: FC = () => {
         if (response.isError || !response.data) {
           alertService.error(
             "Hubo un error intentando actualizar el producto.",
-            response.error?.message ?? response.exception?.message
+            response.error?.message ?? response.exception?.message,
+            { autoClose: false }
           );
           return false;
         }
@@ -233,7 +232,8 @@ const Products: FC = () => {
       if (response.isError) {
         alertService.error(
           "Hubo un error intentando eliminar el producto.",
-          response.error?.message ?? response.exception?.message
+          response.error?.message ?? response.exception?.message,
+          { autoClose: false }
         );
         return false;
       }
@@ -308,7 +308,8 @@ const Products: FC = () => {
       if (response.isError) {
         alertService.error(
           "Hubo un error intentando eliminar la categoría.",
-          response.error?.message ?? response.exception?.message
+          response.error?.message ?? response.exception?.message,
+          { autoClose: false }
         );
         return;
       }

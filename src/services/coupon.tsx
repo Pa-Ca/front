@@ -1,3 +1,4 @@
+import { randomCoupon } from "@utils";
 import { CouponInterface, ExceptionResponse, FetchResponse } from "@objects";
 
 const API_ENDPOINT = process.env.REACT_APP_API_HOST;
@@ -110,4 +111,40 @@ export const getCouponImage = async (couponId: number): Promise<FetchResponse<Fi
   // -------------------------------------------
 
   console.log(couponId);
+};
+
+type CouponList = { coupons: CouponInterface[] };
+export const getBranchCoupons = async (
+  branchId: number,
+  token: string
+): Promise<FetchResponse<CouponList>> => {
+  // FAKE GET - DELETE THIS IN PRODUCTION
+  console.log("[API] Get Branch Products");
+  const data = new Array(Math.floor(Math.random() * 15 + 5))
+    .fill(0)
+    .map(() => randomCoupon());
+  return { data: { coupons: data }, isError: false };
+  // -------------------------------------------
+
+  const uri = `${API_ENDPOINT}/branch/${branchId}/coupon`;
+
+  try {
+    const response = await fetch(uri, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const data: CouponList = await response.json();
+      return { data, isError: false };
+    } else {
+      const exception: ExceptionResponse = await response.json();
+      return { exception, isError: true };
+    }
+  } catch (e) {
+    return { error: e as Error, isError: true };
+  }
 };

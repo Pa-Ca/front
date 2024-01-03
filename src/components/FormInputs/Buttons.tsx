@@ -57,7 +57,7 @@ interface LinkTextProps {
   text: string;
   disabled?: boolean;
   className?: string;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLSpanElement>;
 }
 export const LinkText: FC<LinkTextProps> = ({ text, disabled, className, onClick }) => {
   return (

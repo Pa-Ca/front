@@ -18,13 +18,21 @@ export interface SaleProductInterface {
   price: number;
 }
 
+export enum SaleStatus {
+  CANCELED = 1,
+  ONGOING = 2,
+  CLOSED = 3,
+}
+
+export const HISTORIC_SALE_STATUS = [SaleStatus.CANCELED, SaleStatus.CLOSED];
+
 export interface SaleDataInterface {
   id: number;
   branchId: number;
   clientGuestId: number;
   invoiceId: number;
   clientQuantity: number;
-  status: number;
+  status: SaleStatus;
   startTime: string;
   endTime: string;
   dollarExchange: number;

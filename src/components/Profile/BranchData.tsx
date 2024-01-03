@@ -140,7 +140,8 @@ export const BranchData: FC = () => {
       if (response.isError) {
         alertService.error(
           "Hubo un error al intentar eliminar la tarifa.",
-          response.error?.message ?? response.exception?.message
+          response.error?.message ?? response.exception?.message,
+          { autoClose: false }
         );
         return;
       }

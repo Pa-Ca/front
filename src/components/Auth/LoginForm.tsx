@@ -21,6 +21,7 @@ const Form: FC<FormInterface> = ({ formik }) => {
         <FormText
           id="email"
           name="email"
+          type="email"
           autoComplete="email"
           label="Correo"
           value={formik.values.email}

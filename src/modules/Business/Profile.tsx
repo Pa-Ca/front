@@ -70,7 +70,8 @@ const Profile: FC = () => {
       if (response.isError) {
         alertService.error(
           "No se pudo actualizar la imagen",
-          response.error?.message ?? response.exception?.message
+          response.error?.message ?? response.exception?.message,
+          { autoClose: false }
         );
         return;
       }

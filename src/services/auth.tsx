@@ -44,6 +44,10 @@ const loginBusiness = async (
   }
 };
 
+type ClientResponse = {
+  client: ClientInterface;
+  clientGuestId: number;
+};
 const loginClient = async (
   loginData: LoginResponseDTO
 ): Promise<FetchResponse<ClientInterface>> => {
@@ -59,8 +63,14 @@ const loginClient = async (
     });
 
     if (response.status === 200) {
-      const data: ClientInterface = await response.json();
-      return { data, isError: false };
+      const data: ClientResponse = await response.json();
+      return {
+        data: {
+          ...data.client,
+          clientGuestId: data.clientGuestId,
+        },
+        isError: false,
+      };
     } else {
       const exception: ExceptionResponse = await response.json();
       return { exception, isError: true };
@@ -158,7 +168,7 @@ const signupClient = async (
   loginData: LoginResponseDTO
 ): Promise<FetchResponse<ClientInterface>> => {
   // Create the Business
-  const uri = `${API_ENDPOINT}/business`;
+  const uri = `${API_ENDPOINT}/client`;
   try {
     const response = await fetch(uri, {
       method: "POST",

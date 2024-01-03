@@ -1,22 +1,22 @@
 import {
-  randomBestBranchProductStats,
-  randomBranchReservesStats,
   randomBranchYearStats,
+  randomBestBranchProductStats,
+  randomBranchReservationsStats,
 } from "@utils";
 import {
   FetchResponse,
   BranchSaleStatsInterface,
-  BranchReservesStatsInterface,
   BranchProductStatsInterface,
+  BranchReservationsStatsInterface,
 } from "@objects";
 
-export const getBranchReservesStats = async (
+export const getBranchReservationsStats = async (
   branchId: number,
   token: string
-): Promise<FetchResponse<BranchReservesStatsInterface>> => {
+): Promise<FetchResponse<BranchReservationsStatsInterface>> => {
   // FAKE GET - DELETE THIS IN PRODUCTION
-  console.log("[API] Get Branch Reserves Stats");
-  const data = randomBranchReservesStats();
+  console.log("[API] Get Branch Reservations Stats");
+  const data = randomBranchReservationsStats();
   return { data: data, isError: false };
   // -------------------------------------------
 

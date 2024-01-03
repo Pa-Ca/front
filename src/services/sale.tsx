@@ -1,30 +1,99 @@
 import { randomSale } from "@utils";
-import { ExceptionResponse, FetchResponse, SaleInterface, TableInterace } from "@objects";
+import {
+  ExceptionResponse,
+  FetchResponse,
+  SaleDataInterface,
+  SaleInterface,
+  SaleStatus,
+  TableInterace,
+} from "@objects";
 
 const API_ENDPOINT = process.env.REACT_APP_API_HOST;
 
-interface SaleResponse {
+export const createSale = async (
+  dto: SaleInterface,
+  token: string
+): Promise<FetchResponse<SaleInterface>> => {
+  // FAKE GET - DELETE THIS IN PRODUCTION
+  console.log("[API] Create Sale");
+  const data = {
+    ...dto,
+    sale: {
+      ...dto.sale,
+      id: Math.floor(Math.random() * 1000),
+    },
+    guest: dto.guest
+      ? {
+          ...dto.guest,
+          id: Math.floor(Math.random() * 1000),
+        }
+      : undefined,
+  };
+  return { data, isError: false };
+  // -------------------------------------------
+  const uri = `${API_ENDPOINT}/sale`;
+
+  try {
+    const response = await fetch(uri, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(dto),
+    });
+
+    if (response.status === 200) {
+      const data: SaleInterface = await response.json();
+      return { data, isError: false };
+    } else {
+      const exception: ExceptionResponse = await response.json();
+      return { exception, isError: true };
+    }
+  } catch (e) {
+    return { error: e as Error, isError: true };
+  }
+};
+
+export const updateSale = async (
+  dto: Partial<SaleDataInterface>,
+  token: string
+): Promise<FetchResponse<SaleInterface>> => {
+  // FAKE GET - DELETE THIS IN PRODUCTION
+  console.log("[API] Update Sale");
+  return { isError: false };
+
+  const uri = `${API_ENDPOINT}/sale/${dto.id}`;
+
+  try {
+    const response = await fetch(uri, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(dto),
+    });
+
+    if (response.status === 200) {
+      const data: SaleInterface = await response.json();
+      return { data, isError: false };
+    } else {
+      const exception: ExceptionResponse = await response.json();
+      return { exception, isError: true };
+    }
+  } catch (e) {
+    return { error: e as Error, isError: true };
+  }
+};
+
+interface BranchSales {
   ongoingSalesInfo: SaleInterface[];
   historicSalesInfo: SaleInterface[];
   currentHistoricPage: number;
   totalHistoricPages: number;
   totalHistoricElements: number;
 }
-
-/**
- * @brief Get the sales of a branch given its id
- *
- * @param id Branch id
- * @param token Authorization token
- * @param pageIndex Index of the page
- * @param pageSize Size of the page
- * @param startTime Start time of the sales
- * @param endTime End time of the sales
- * @param fullname Fullname of the customer
- * @param identityDocument Identity document of the customer
- *
- * @returns API response when refresh
- */
 export const getBranchSales = async (
   branchId: number,
   token: string,
@@ -34,8 +103,9 @@ export const getBranchSales = async (
   startTime?: Date,
   endTime?: Date,
   fullname?: string,
-  identityDocument?: string
-): Promise<FetchResponse<SaleResponse>> => {
+  identityDocument?: string,
+  status?: SaleStatus[]
+): Promise<FetchResponse<BranchSales>> => {
   // FAKE GET - DELETE THIS IN PRODUCTION
   console.log("[API] Get Branch Sales");
   const ongoing = new Array(Math.floor(Math.random() * 10 + 1))
@@ -44,7 +114,9 @@ export const getBranchSales = async (
   const start = pageIndex * pageSize;
   const end = start + pageSize;
   const length = start > 100 ? 0 : end > 100 ? 100 - start : pageSize;
-  const historic = new Array(length).fill(null).map(() => randomSale(branchId, tables));
+  const historic = new Array(length)
+    .fill(null)
+    .map(() => randomSale(branchId, tables, status, startTime, endTime));
   return {
     data: {
       ongoingSalesInfo: ongoing,
@@ -74,6 +146,9 @@ export const getBranchSales = async (
   if (identityDocument) {
     uri = uri.concat(`&identityDocument=${identityDocument}`);
   }
+  if (status) {
+    uri = uri.concat(`&status=${status[0]}`);
+  }
 
   try {
     const response = await fetch(uri, {
@@ -85,7 +160,7 @@ export const getBranchSales = async (
     });
 
     if (response.status === 200) {
-      const data: SaleResponse = await response.json();
+      const data: BranchSales = await response.json();
       return { data, isError: false };
     } else {
       const exception: ExceptionResponse = await response.json();

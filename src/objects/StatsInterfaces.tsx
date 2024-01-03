@@ -1,4 +1,4 @@
-export interface BranchReservesStatsInterface {
+export interface BranchReservationsStatsInterface {
   pending: number;
   approved: number;
   active: number;

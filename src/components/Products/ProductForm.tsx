@@ -80,7 +80,7 @@ const Form: FC<FormInterface> = ({ formik, categories, onCancel }) => {
                 ? formik.errors.price
                 : undefined
             }
-            onChange={(e) => handleNumberChange(e, formik.handleChange)}
+            onChange={(e) => handleNumberChange(e, formik.handleChange, 0)}
             containerClassName="flex flex-1 flex-col"
           />
         </div>

@@ -7,4 +7,6 @@ export * from "./BranchInterface";
 export * from "./StatsInterfaces";
 export * from "./CouponInterface";
 export * from "./ProductInterface";
+export * from "./InvoiceInterface";
 export * from "./BusinessInterface";
+export * from "./ReservationInterface";

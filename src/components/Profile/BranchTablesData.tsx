@@ -5,8 +5,9 @@ import { TableCard } from "./TableCard";
 import { Switch } from "../FormInputs/Switch";
 import { useAppSelector } from "src/store/hooks";
 import { FormText } from "../FormInputs/FormText";
-import { SaleInterface, TableInterace } from "@objects";
 import { PaginationFooter } from "../Molecules/PaginationFooter";
+import { SaleInterface, SaleStatus, TableInterace } from "@objects";
+import tableNotFound from "../../assets/images/table-not-found.png";
 import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
 import defaultImage from "../../assets/images/default-product-image-without-bg.png";
 import {
@@ -40,7 +41,11 @@ export const BranchTablesData: FC = () => {
           (!tableSearch ||
             table.name.toLowerCase().includes(tableSearch.toLowerCase())) &&
           (!activeSales ||
-            sales.some((sale) => sale.tables.some((t) => t.id === table.id)))
+            sales.some(
+              (sale) =>
+                sale.sale.status === SaleStatus.ONGOING &&
+                sale.tables.some((t) => t.id === table.id)
+            ))
       )
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [tableSearch, activeSales, tables, sales]);
@@ -65,7 +70,8 @@ export const BranchTablesData: FC = () => {
       if (response.isError || !response.data) {
         alertService.error(
           "No se pudo crear la mesa",
-          response.error?.message ?? response.exception?.message
+          response.error?.message ?? response.exception?.message,
+          { autoClose: false }
         );
         return;
       }
@@ -81,7 +87,8 @@ export const BranchTablesData: FC = () => {
       if (response.isError) {
         alertService.error(
           "No se pudo eliminar la mesa",
-          response.error?.message ?? response.exception?.message
+          response.error?.message ?? response.exception?.message,
+          { autoClose: false }
         );
         return;
       }
@@ -171,6 +178,20 @@ export const BranchTablesData: FC = () => {
                 onDelete={() => handleDeleteTable(table)}
               />
             ))}
+
+            {paginatedTables.length === 0 && (
+              <div className="flex flex-col items-center justify-center flex-1">
+                <img
+                  src={tableNotFound}
+                  alt="Table not found"
+                  className="w-[17rem] h-[17rem] object-cover opacity-[0.5]"
+                />
+                <p className="text-xl text-center font-light text-gray-700">
+                  Parece que no hay mesas que coincidan con tu búsqueda. Intenta creando
+                  uno nuevo.
+                </p>
+              </div>
+            )}
           </div>
 
           <PaginationFooter

@@ -106,7 +106,9 @@ const Form: FC<FormInterface> = ({ formik, products, categories, onCancel }) => 
             required
             id="value"
             name="value"
+            autoComplete="off"
             label="Descuento"
+            value={formik.values.value}
             selected={{
               value: formik.values.discountType,
               name: formik.values.discountType === CouponDiscountType.AMOUNT ? "$" : "%",
@@ -118,7 +120,7 @@ const Form: FC<FormInterface> = ({ formik, products, categories, onCancel }) => 
                 : undefined
             }
             options={DISCOUNT_TYPES_OPTIONS}
-            onChange={(e) => handleNumberChange(e, formik.handleChange)}
+            onChange={(e) => handleNumberChange(e, formik.handleChange, 0)}
             onSelectOption={(value) => formik.setFieldValue("discountType", value)}
             containerClassName="flex flex-1 flex-col"
             selectContainerClassNames="!w-14"

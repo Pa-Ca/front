@@ -2,7 +2,7 @@ import { FC, useMemo } from "react";
 import classNames from "classnames";
 import { Duration } from "@objects";
 import { FormikErrors } from "formik";
-import { handleNaturalNumberChange } from "@utils";
+import { handleIntegerChange } from "@utils";
 
 export interface FormDurationProps {
   id: string;
@@ -78,12 +78,14 @@ export const FormDuration: FC<FormDurationProps> = ({
             maxLength={2}
             disabled={disabled}
             onChange={(e) =>
-              handleNaturalNumberChange(e, (event) =>
-                handleChange(event.target.value, minutes)
+              handleIntegerChange(
+                e,
+                (event) => handleChange(event.target.value, minutes),
+                0
               )
             }
             className={classNames(
-              "border-0 border-b focus:border-orange-700 focus:border-b-[0.15rem] focus:ring-0 w-12 text-center",
+              "border-0 focus:border-orange-700 border-b-[0.15rem] focus:ring-0 w-12 text-center",
               !!error && "border-red-500 border-b-[0.1rem]"
             )}
           />
@@ -97,12 +99,15 @@ export const FormDuration: FC<FormDurationProps> = ({
             maxLength={2}
             disabled={disabled}
             onChange={(e) =>
-              handleNaturalNumberChange(e, (event) =>
-                handleChange(hours, event.target.value)
+              handleIntegerChange(
+                e,
+                (event) => handleChange(hours, event.target.value),
+                0,
+                59
               )
             }
             className={classNames(
-              "border-0 border-b focus:border-orange-700 focus:border-b-[0.15rem] focus:ring-0 w-12 text-center",
+              "border-0 focus:border-orange-700 border-b-[0.15rem] focus:ring-0 w-12 text-center",
               !!error && "border-red-500 border-b-[0.1rem]"
             )}
           />

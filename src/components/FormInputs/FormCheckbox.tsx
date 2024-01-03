@@ -2,8 +2,9 @@ import { FC } from "react";
 import classNames from "classnames";
 import { FormikErrors } from "formik";
 import { FormLabel } from "./FormLabel";
+import { Checkbox, CheckboxProps } from "@material-tailwind/react";
 
-interface FormCheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface FormCheckboxProps extends CheckboxProps {
   name: string;
   label?: string;
   ref?: React.Ref<HTMLInputElement>;
@@ -27,11 +28,14 @@ export const FormCheckbox: FC<FormCheckboxProps> = ({
   return (
     <div className={containerClassName}>
       <div className="flex items-center">
-        <input
+        <Checkbox
           {...props}
+          ripple
           ref={ref}
           name={name}
           type="checkbox"
+          color="orange"
+          crossOrigin=""
           className={classNames(
             "peer h-4 w-4 text-orange-700 focus:ring-orange-700 border-gray-300 shadow rounded",
             inputClassName

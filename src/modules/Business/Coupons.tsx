@@ -6,34 +6,35 @@ import { FormikHelpers } from "formik";
 import { useAppSelector } from "src/store/hooks";
 import { TicketIcon } from "@heroicons/react/24/outline";
 import { formatCouponDiscountType, formatCouponType } from "@utils";
-import { CouponForm, CouponFormValues } from "src/components/Coupons/CouponForm";
-import { FormDatePicker } from "src/components/FormInputs/FormDatePicker";
-import {
-  CouponDiscountType,
-  CouponInterface,
-  CouponType,
-  ProductCategoryInterface,
-  ProductInterface,
-} from "@objects";
-import { PaginationFooter } from "src/components/Molecules/PaginationFooter";
 import defaultImage from "../../assets/images/default-coupon-image-without-bg.png";
+import {
+  CouponType,
+  CouponInterface,
+  ProductInterface,
+  CouponDiscountType,
+  ProductCategoryInterface,
+} from "@objects";
 import {
   alertService,
   createCoupon,
   deleteCoupon,
-  getBranchCoupons,
-  getBranchProductCategories,
-  getBranchProducts,
   updateCoupon,
+  getBranchCoupons,
+  getBranchProducts,
+  getBranchProductCategories,
 } from "@services";
 import {
+  Modal,
   Switch,
   FormText,
   CouponCard,
   FormSelect,
+  CouponForm,
   PrimaryButton,
+  FormDatePicker,
   BusinessMainPage,
-  Modal,
+  CouponFormValues,
+  PaginationFooter,
 } from "@components";
 
 const COUPONS_PER_PAGE = 12;
@@ -191,7 +192,8 @@ const Coupons: FC = () => {
         if (response.isError || !response.data) {
           alertService.error(
             "Hubo un error intentando actualizar el cupón.",
-            response.error?.message ?? response.exception?.message
+            response.error?.message ?? response.exception?.message,
+            { autoClose: false }
           );
           return false;
         }
@@ -210,7 +212,8 @@ const Coupons: FC = () => {
       if (response.isError) {
         alertService.error(
           "Hubo un error intentando eliminar el producto.",
-          response.error?.message ?? response.exception?.message
+          response.error?.message ?? response.exception?.message,
+          { autoClose: false }
         );
         return false;
       }

@@ -2,8 +2,8 @@ import { FC, useMemo, useState } from "react";
 import { Modal } from "../Atoms/Modal";
 import ReactCardFlip from "react-card-flip";
 import { IconButton } from "@material-tailwind/react";
-import { SaleInterface, TableInterace } from "@objects";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { SaleInterface, SaleStatus, TableInterace } from "@objects";
 import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
 
 interface TableCardProps {
@@ -16,7 +16,12 @@ export const TableCard: FC<TableCardProps> = ({ table, sales, onDelete }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const tableSales = useMemo(
-    () => sales.filter((sale) => sale.tables.some((t) => t.id === table.id)).length,
+    () =>
+      sales.filter(
+        (sale) =>
+          sale.sale.status === SaleStatus.ONGOING &&
+          sale.tables.some((t) => t.id === table.id)
+      ).length,
     [sales, table.id]
   );
 
