@@ -44,12 +44,17 @@ export function FormSearch<T>({
   const [search, setSearch] = useState("");
 
   const filteredOptions = useMemo(() => {
+    const tokens = search.toLowerCase().split(" ");
+
     return options.filter(
       (option) =>
         !search ||
         !option.name ||
-        option.name.toLowerCase().includes(search.toLowerCase()) ||
-        option.description?.toLowerCase().includes(search.toLowerCase())
+        tokens.every(
+          (token) =>
+            option.name.toLowerCase().includes(token) ||
+            option.description?.toLowerCase().includes(token)
+        )
     );
   }, [search, options]);
 
