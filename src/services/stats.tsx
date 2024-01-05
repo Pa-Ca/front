@@ -1,11 +1,13 @@
 import {
   randomBranchYearStats,
+  randomBestBranchCouponStats,
   randomBestBranchProductStats,
   randomBranchReservationsStats,
 } from "@utils";
 import {
   FetchResponse,
   BranchSaleStatsInterface,
+  BranchCouponStatsInterface,
   BranchProductStatsInterface,
   BranchReservationsStatsInterface,
 } from "@objects";
@@ -44,6 +46,20 @@ export const getBranchBestProductsStats = async (
   // FAKE GET - DELETE THIS IN PRODUCTION
   console.log("[API] Get Branch Best Products Stats");
   const data = randomBestBranchProductStats(period);
+  return { data: data, isError: false };
+  // -------------------------------------------
+
+  console.log(branchId, token);
+};
+
+export const getBranchBestCouponsStats = async (
+  branchId: number,
+  period: number,
+  token: string
+): Promise<FetchResponse<BranchCouponStatsInterface[]>> => {
+  // FAKE GET - DELETE THIS IN PRODUCTION
+  console.log("[API] Get Branch Best Coupons Stats");
+  const data = randomBestBranchCouponStats(period);
   return { data: data, isError: false };
   // -------------------------------------------
 

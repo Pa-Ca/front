@@ -1,8 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
+import { v4 } from "uuid";
 import moment from "moment";
-import { useFetch } from "@hooks";
-import { getBranchSalesStats } from "@services";
-import { useAppSelector } from "src/store/hooks";
 import { BranchSaleStatsInterface } from "@objects";
 import { renderToStaticMarkup } from "react-dom/server";
 import { IChartApi, ISeriesApi, Time, createChart } from "lightweight-charts";
@@ -62,20 +60,21 @@ const getTooltip = (date: Time, price: number, sales: number) => {
   return renderToStaticMarkup(tooltip);
 };
 
-export const BranchSalesChart: FC = () => {
-  const fetch = useFetch();
-  const branch = useAppSelector((state) => state.branches.selected);
+interface BranchSalesChartProps {
+  data: BranchSaleStatsInterface[];
+}
+export const BranchSalesChart: FC<BranchSalesChartProps> = ({ data }) => {
+  const key = v4();
 
   const countRef = useRef(0);
   const [chart, setChart] = useState<IChartApi>();
-  const [data, setData] = useState<BranchSaleStatsInterface[]>([]);
   const [areaSeries, setAreaSeries] = useState<ISeriesApi<"Area">>();
   const [fullData, setFullData] = useState<Map<Time, BranchSaleStatsInterface>>(
     new Map()
   );
 
   useEffect(() => {
-    const dataRef = document.getElementById("branch-sale-stats");
+    const dataRef = document.getElementById(`branch-sale-stats-${key}`);
     if (!!dataRef && countRef.current === 0) {
       countRef.current += 1;
 
@@ -91,18 +90,6 @@ export const BranchSalesChart: FC = () => {
       setAreaSeries(areaSeries);
     }
   }, []);
-
-  useEffect(() => {
-    if (!branch?.id) return;
-
-    fetch((token: string) => getBranchSalesStats(branch?.id, token)).then((response) => {
-      if (response.isError || !response.data) {
-        return;
-      }
-
-      setData(response.data);
-    });
-  }, [branch?.id, fetch]);
 
   useEffect(() => {
     if (!areaSeries || data.length === 0) return;
@@ -125,8 +112,8 @@ export const BranchSalesChart: FC = () => {
     if (!chart) return;
 
     // Create tooltip
-    const toolTip = document.getElementById("branch-sale-stats-tooltip");
-    const dataRef = document.getElementById("branch-sale-stats");
+    const toolTip = document.getElementById(`branch-sale-stats-tooltip-${key}`);
+    const dataRef = document.getElementById(`branch-sale-stats-${key}`);
     if (!toolTip || !dataRef) return;
 
     chart.subscribeCrosshairMove((param) => {
@@ -161,9 +148,9 @@ export const BranchSalesChart: FC = () => {
   }, [chart, fullData]);
 
   return (
-    <div className="relative mt-6 w-full" id="branch-sale-stats">
+    <div className="relative mt-6 w-full" id={`branch-sale-stats-${key}`}>
       <div
-        id="branch-sale-stats-tooltip"
+        id={`branch-sale-stats-tooltip-${key}`}
         style={{ width: TOOLTIP_WIDTH + "px" }}
         className={`h-full absolute hidden p-2 box-border text-xs text-left z-10 top-0 left-3 pointer-events-none rounded-t-md border-b-0 shadow-md font-sans antialiased`}
       />

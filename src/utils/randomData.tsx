@@ -8,6 +8,7 @@ import {
   Duration,
   UserRole,
   LocalTime,
+  SaleStatus,
   CouponType,
   TaxInterface,
   TableInterace,
@@ -27,9 +28,9 @@ import {
   BranchSaleStatsInterface,
   ProductCategoryInterface,
   ReservationInfoInterface,
+  BranchCouponStatsInterface,
   BranchProductStatsInterface,
   BranchReservationsStatsInterface,
-  SaleStatus,
 } from "@objects";
 
 const PHONES = ["0424", "0414", "0412", "0416"];
@@ -785,6 +786,27 @@ export const randomBestBranchProductStats = (
     });
   }
   result.sort((a, b) => b.sales - a.sales);
+
+  return result;
+};
+
+export const randomBestBranchCouponStats = (
+  period: number
+): BranchCouponStatsInterface[] => {
+  const productos = randomSubArray(COUPON_NAMES, 5);
+  const result: BranchCouponStatsInterface[] = [];
+
+  const base = period * 20;
+  const variation = period * 5;
+
+  for (let i = 0; i < productos.length; i++) {
+    const total = Math.floor(Math.random() * variation + base);
+    result.push({
+      name: productos[i],
+      total,
+    });
+  }
+  result.sort((a, b) => b.total - a.total);
 
   return result;
 };

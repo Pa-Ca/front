@@ -42,6 +42,7 @@ export * from "./Profile/BranchTablesData";
 export * from "./Profile/EditPasswordForm";
 
 export * from "./Charts/BranchSalesChart";
+export * from "./Charts/BranchCouponsChart";
 export * from "./Charts/BranchProductsChart";
 
 export * from "./Coupons/CouponCard";

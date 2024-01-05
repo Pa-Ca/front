@@ -16,3 +16,8 @@ export interface BranchProductStatsInterface {
   total: number;
   sales: number;
 }
+
+export interface BranchCouponStatsInterface {
+  name: string;
+  total: number;
+}

@@ -2,13 +2,15 @@ import { FC, useEffect, useState } from "react";
 import { useFetch } from "@hooks";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "src/store/hooks";
-import { getBranchReservationsStats } from "@services";
+import { BranchSaleStatsInterface } from "@objects";
 import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
+import { getBranchReservationsStats, getBranchSalesStats } from "@services";
 import {
   LinkText,
   FormSelect,
   BusinessMainPage,
   BranchSalesChart,
+  BranchCouponsChart,
   BranchProductsChart,
 } from "@components";
 
@@ -23,8 +25,10 @@ const Dashboard: FC = () => {
   const navigate = useNavigate();
   const branch = useAppSelector((state) => state.branches.selected);
 
-  const [period, setPeriod] = useState(PERIODS[0]);
   const [barColor, setBarColor] = useState("#ED8936");
+  const [couponsPeriod, setCouponsPeriod] = useState(PERIODS[0]);
+  const [productsPeriod, setProductsPeriod] = useState(PERIODS[0]);
+  const [saleStatsData, setSalesStatsData] = useState<BranchSaleStatsInterface[]>([]);
   const [branchReservationsStats, setBranchReservationsStats] = useState({
     active: 0,
     pending: 0,
@@ -47,6 +51,18 @@ const Dashboard: FC = () => {
   }, [branch?.id, fetch]);
 
   useEffect(() => {
+    if (!branch?.id) return;
+
+    fetch((token: string) => getBranchSalesStats(branch?.id, token)).then((response) => {
+      if (response.isError || !response.data) {
+        return;
+      }
+
+      setSalesStatsData(response.data);
+    });
+  }, [branch?.id, fetch]);
+
+  useEffect(() => {
     document.title = "Dashboard - Pa'ca";
   }, []);
 
@@ -63,6 +79,7 @@ const Dashboard: FC = () => {
       </div>
 
       <div className="flex flex-1 flex-col md:flex-row items-center gap-16 md:gap-8">
+        {/* Percentage branch full */}
         <div className="flex flex-1 flex-col items-center h-full mt-8 md:mt-0">
           <h3 className="text-2xl font-bold text-gray-800 text-center">
             Porcentaje del local lleno
@@ -100,7 +117,7 @@ const Dashboard: FC = () => {
                   {branchReservationsStats.percentageFull.toFixed(0)}%
                 </p>
                 <LinkText
-                  className="text-lg"
+                  className="text-xl"
                   text="Ver reservas"
                   onClick={() => navigate("/business/reservations")}
                 />
@@ -145,42 +162,81 @@ const Dashboard: FC = () => {
         </div>
 
         <div className="flex flex-col flex-[2.3] w-full h-full gap-16 md:gap-8">
-          <div className="w-full">
+          {/* Sales stats */}
+          <div className="w-full md:hidden xl:block">
             <h3 className="text-center md:text-left text-2xl font-bold text-gray-800">
               Ganancias diarias
             </h3>
-            <BranchSalesChart />
+            <BranchSalesChart data={saleStatsData} />
           </div>
 
-          <div className="flex flex-col md:flex-row overflow-hidden gap-2">
-            <div className="flex-[1.5]">
+          {/* Products and coupons stats */}
+          <div className="flex flex-col xl:flex-row overflow-hidden gap-6">
+            <div className="flex-1">
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-between mb-4">
-                <h3 className="text-2xl font-bold text-center sm:text-left text-gray-800">
+                <h3 className="text-xl font-bold text-center sm:text-left text-gray-800">
                   <LinkText
                     text="Productos"
-                    className="text-2xl font-bold"
+                    className="text-xl font-bold"
                     onClick={() => navigate("/business/products")}
                   />{" "}
                   más vendidos
                 </h3>
 
-                <div className="w-full sm:w-48">
+                <div className="flex w-full sm:w-48 justify-center sm:justify-end">
                   <FormSelect
                     label=""
                     id="branches"
                     name="branches"
-                    selected={period}
+                    selected={productsPeriod}
                     options={PERIODS}
-                    onChange={(p) => setPeriod(PERIODS.find((item) => item.value === p)!)}
+                    onChange={(p) =>
+                      setProductsPeriod(PERIODS.find((item) => item.value === p)!)
+                    }
+                    containerClassName="max-w-[10rem]"
                   />
                 </div>
               </div>
-              <BranchProductsChart period={period.value} />
+              <BranchProductsChart period={productsPeriod.value} />
             </div>
 
-            <div className="flex-1 md:hidden xl:block"></div>
+            <div className="flex-1">
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-between mb-4">
+                <h3 className="text-xl font-bold text-center sm:text-left text-gray-800">
+                  <LinkText
+                    text="Cupones"
+                    className="text-xl font-bold"
+                    onClick={() => navigate("/business/coupons")}
+                  />{" "}
+                  más usados
+                </h3>
+
+                <div className="flex w-full sm:w-48 justify-center sm:justify-end">
+                  <FormSelect
+                    label=""
+                    id="branches"
+                    name="branches"
+                    selected={couponsPeriod}
+                    options={PERIODS}
+                    onChange={(p) =>
+                      setCouponsPeriod(PERIODS.find((item) => item.value === p)!)
+                    }
+                    containerClassName="max-w-[10rem]"
+                  />
+                </div>
+              </div>
+              <BranchCouponsChart period={couponsPeriod.value} />
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Sales stats */}
+      <div className="w-full hidden md:block mt-6 lg:mt-10 xl:hidden">
+        <h3 className="text-center md:text-left text-2xl font-bold text-gray-800">
+          Ganancias diarias
+        </h3>
+        <BranchSalesChart data={saleStatsData} />
       </div>
     </BusinessMainPage>
   );
