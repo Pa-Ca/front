@@ -1,15 +1,16 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useFetch } from "@hooks";
 import { Modal } from "../Atoms/Modal";
 import { FormikHelpers } from "formik";
-import { BranchImages } from "./BranchImages";
+import { BranchCarousel } from "./BranchCarousel";
 import { TaxForm, TaxFormValues } from "./TaxForm";
+import { PlusIcon } from "@heroicons/react/24/solid";
 import { FormSelect } from "../FormInputs/FormSelect";
+import { IconButton } from "@material-tailwind/react";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { formatDuration, formatLocalTime } from "@utils";
 import { BranchForm, BranchFormValues } from "./BranchForm";
 import { LinkText, PrimaryButton } from "../FormInputs/Buttons";
-import { Carousel, IconButton } from "@material-tailwind/react";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 import { setBranchSelected, setBranches } from "src/store/slices/branches";
 import defaultImage from "../../assets/images/default-product-image-without-bg.png";
@@ -17,16 +18,9 @@ import { BranchInterface, DefaultTaxInterface, Duration, LocalTime } from "@obje
 import {
   alertService,
   createBranch,
-  getBranchImages,
   createDefaultTax,
   deleteDefaultTax,
 } from "@services";
-import {
-  PlusIcon,
-  PencilIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@heroicons/react/24/solid";
 
 const branchToOption = (branch?: BranchInterface) => ({
   value: branch,
@@ -42,11 +36,8 @@ export const BranchData: FC = () => {
   const branches = useAppSelector((state) => state.branches.list);
   const branch = useAppSelector((state) => state.branches.selected);
 
-  const [carouselKey, setCarouselKey] = useState("");
-  const [images, setImages] = useState<string[]>([]);
   const [openCreateTax, setOpenCreateTax] = useState(false);
   const [openEditBranch, setOpenEditBranch] = useState(false);
-  const [openEditImages, setOpenEditImages] = useState(false);
   const [openCreateBranch, setOpenCreateBranch] = useState(false);
 
   const handleBranchCreate = async (
@@ -86,7 +77,6 @@ export const BranchData: FC = () => {
         return;
       }
 
-      setCarouselKey(Math.random().toString());
       dispatch(setBranches([...branches, response.data]));
       dispatch(setBranchSelected(response.data));
       setOpenCreateBranch(false);
@@ -211,17 +201,6 @@ export const BranchData: FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (!branch?.id) return;
-
-    fetch((token: string) => getBranchImages(branch.id, token)).then((response) => {
-      if (response.isError || !response.data) return;
-
-      setCarouselKey(Math.random().toString());
-      setImages(response.data.images);
-    });
-  }, [branch?.id, fetch]);
-
   return (
     <div className="flex flex-col w-full gap-6 text-lg sm:gap-2 text-sm sm:text-md">
       {!!branch && (
@@ -251,50 +230,8 @@ export const BranchData: FC = () => {
 
           <div className="flex flex-1 flex-col gap-8">
             <div className="flex flex-1 flex-col-reverse lg:flex-row gap-8 mt-8">
-              <div className="flex relative lg:flex-1 lg:max-w-[50%]">
-                <Carousel
-                  key={carouselKey}
-                  transition={{ duration: 1 }}
-                  className="flex-1 h-[25rem] sm:h-auto rounded-xl"
-                  prevArrow={({ handlePrev }) => (
-                    <IconButton
-                      variant="text"
-                      color="white"
-                      size="lg"
-                      onClick={handlePrev}
-                      className="!absolute !bg-white !bg-opacity-50 hover:!bg-opacity-75 top-2/4 left-4 -translate-y-2/4"
-                    >
-                      <ChevronLeftIcon className="h-6 w-6" />
-                    </IconButton>
-                  )}
-                  nextArrow={({ handleNext }) => (
-                    <IconButton
-                      variant="text"
-                      color="white"
-                      size="lg"
-                      onClick={handleNext}
-                      className="!absolute !bg-white !bg-opacity-50 hover:!bg-opacity-75 top-2/4 !right-4 -translate-y-2/4"
-                    >
-                      <ChevronRightIcon className="h-6 w-6" />
-                    </IconButton>
-                  )}
-                >
-                  {images.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`image-${index}`}
-                      className="h-full w-full object-cover"
-                    />
-                  ))}
-                </Carousel>
-
-                <div
-                  onClick={() => setOpenEditImages(true)}
-                  className="absolute top-4 right-4 p-2 bg-orange-700 rounded-lg cursor-pointer shadow-lg hover:bg-orange-500"
-                >
-                  <PencilIcon className="h-5 w-5 text-white" />
-                </div>
+              <div className="flex lg:flex-1 lg:max-w-[50%]">
+                <BranchCarousel />
               </div>
 
               <div className="flex lg:flex-[1.5] flex-col gap-4 lg:max-w-[50%] sm:gap-2">
@@ -501,24 +438,6 @@ export const BranchData: FC = () => {
           onSubmit={handleBranchUpdate}
           onCancel={() => setOpenCreateBranch(false)}
         />
-      </Modal>
-
-      <Modal
-        open={openEditImages}
-        setOpen={setOpenEditImages}
-        className="w-full m-6 md:m-8 max-w-[45rem]"
-      >
-        <p className="text-xl font-light mb-4">
-          Imágenes de <span className="font-normal italic">{branch?.name}</span>
-        </p>
-
-        <BranchImages images={images} setImages={setImages} />
-
-        <div className="flex w-full justify-end mt-8">
-          <PrimaryButton className="w-32" onClick={() => setOpenEditImages(false)}>
-            Cerrar
-          </PrimaryButton>
-        </div>
       </Modal>
     </div>
   );

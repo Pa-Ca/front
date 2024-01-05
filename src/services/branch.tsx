@@ -118,11 +118,10 @@ export const getBranchTables = async (
 export const getBranchImages = async (
   branchId: number,
   token: string
-): Promise<FetchResponse<{ images: string[] }>> => {
+): Promise<FetchResponse<{ images: File[] }>> => {
   // FAKE GET - DELETE THIS IN PRODUCTION
   console.log("[API] Get Branch Images");
-  const data = randomImages(Math.floor(Math.random() * 6 + 3));
-  return { data: { images: data }, isError: false };
+  return { data: { images: [] }, isError: false };
   // -------------------------------------------
 
   console.log(branchId, token);
@@ -198,13 +197,12 @@ export const deleteDefaultTax = async (
 
 export const addBranchImage = async (
   branchId: number,
-  image: string,
+  image: File,
   token: string
-): Promise<FetchResponse<string[]>> => {
+): Promise<FetchResponse<null>> => {
   // FAKE GET - DELETE THIS IN PRODUCTION
   console.log("[API] Add Branch Image");
-  const data = randomImages(Math.floor(Math.random() * 6 + 3));
-  return { data: data, isError: false };
+  return { data: null, isError: false };
   // -------------------------------------------
 
   console.log(branchId, image, token);
@@ -212,7 +210,7 @@ export const addBranchImage = async (
 
 export const deleteBranchImage = async (
   branchId: number,
-  imageIndex: number,
+  image: File,
   token: string
 ): Promise<FetchResponse<string[]>> => {
   // FAKE GET - DELETE THIS IN PRODUCTION
@@ -221,7 +219,7 @@ export const deleteBranchImage = async (
   return { data: data, isError: false };
   // -------------------------------------------
 
-  console.log(branchId, imageIndex, token);
+  console.log(branchId, image, token);
 };
 
 export const addBranchTable = async (

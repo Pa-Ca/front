@@ -6,9 +6,10 @@ import { Modal } from "../Atoms/Modal";
 import { getCouponImage } from "@services";
 import ReactCardFlip from "react-card-flip";
 import { Switch } from "../FormInputs/Switch";
-import { CouponForm, CouponFormValues } from "./CouponForm";
 import { IconButton } from "@material-tailwind/react";
+import { CouponForm, CouponFormValues } from "./CouponForm";
 import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
 import defaultImage from "../../assets/images/default-coupon-image.png";
 import {
   CouponDiscountType,
@@ -17,7 +18,6 @@ import {
   ProductCategoryInterface,
   ProductInterface,
 } from "@objects";
-import { PrimaryButton, SecondaryButton } from "../FormInputs/Buttons";
 
 interface CouponCardProps {
   coupon: CouponInterface;
