@@ -64,9 +64,8 @@ interface BranchSalesChartProps {
   data: BranchSaleStatsInterface[];
 }
 export const BranchSalesChart: FC<BranchSalesChartProps> = ({ data }) => {
-  const key = v4();
-
   const countRef = useRef(0);
+  const [key] = useState(v4());
   const [chart, setChart] = useState<IChartApi>();
   const [areaSeries, setAreaSeries] = useState<ISeriesApi<"Area">>();
   const [fullData, setFullData] = useState<Map<Time, BranchSaleStatsInterface>>(
@@ -89,7 +88,7 @@ export const BranchSalesChart: FC<BranchSalesChartProps> = ({ data }) => {
       });
       setAreaSeries(areaSeries);
     }
-  }, []);
+  }, [key]);
 
   useEffect(() => {
     if (!areaSeries || data.length === 0) return;
@@ -145,7 +144,7 @@ export const BranchSalesChart: FC<BranchSalesChartProps> = ({ data }) => {
         toolTip.style.left = left + "px";
       }
     });
-  }, [chart, fullData]);
+  }, [chart, fullData, key]);
 
   return (
     <div className="relative mt-6 w-full" id={`branch-sale-stats-${key}`}>

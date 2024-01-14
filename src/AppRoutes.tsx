@@ -6,6 +6,7 @@ import Profile from "./modules/Business/Profile";
 import Coupons from "./modules/Business/Coupons";
 import Products from "./modules/Business/Products";
 import Dashboard from "./modules/Business/Dashboard";
+import LandingPage from "./modules/Guest/LandingPage";
 import Reservations from "./modules/Business/Reservations";
 import PasswordRecovery from "./modules/Auth/PasswordRecovery";
 import TermsAndConditions from "./modules/Auth/TermsAndConditions";
@@ -30,11 +31,15 @@ interface AppRoute {
 }
 
 const AppRoutes: AppRoute[] = [
+  // Auth pages
   { path: "/login", element: <Login />, auth: false },
   { path: "/signup", element: <Signup />, auth: false },
   { path: "/password-recovery", element: <PasswordRecovery />, auth: false },
   { path: "/terms-and-conditions", element: <TermsAndConditions />, auth: false },
-  { path: "/*", element: <Login />, auth: false },
+
+  // Guest pages
+  { path: "/", element: <LandingPage />, auth: false },
+  { path: "/*", element: <LandingPage />, auth: false },
 
   // Business pages
   {

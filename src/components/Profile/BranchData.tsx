@@ -350,10 +350,7 @@ export const BranchData: FC = () => {
                   </div>
                 </div>
 
-                <div
-                  className="flex w-full h-full items-end"
-                  onClick={() => setOpenEditBranch(true)}
-                >
+                <div className="flex w-full mt-8" onClick={() => setOpenEditBranch(true)}>
                   <PrimaryButton className="w-full sm:w-24 h-7 !py-1 text-xs">
                     Editar
                   </PrimaryButton>
